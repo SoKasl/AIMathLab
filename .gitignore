@@ -1,0 +1,21 @@
+# Virtual Environment
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Model Weights
+*.pt
+*.pth
+
+# Generated Data
+math_train*.txt
+math_eval*.txt
+
+# Experiment Results
+experiment_results.csv
+
+# macOS
+.DS_Store

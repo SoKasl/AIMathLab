@@ -33,7 +33,7 @@ def parse_equation_block(block):
         
     return prompt, expected, op
 
-def evaluate_model(model=None, tokenizer=None, device=None):
+def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False):
     if model is None:
         print("Initializing Standalone Evaluator...")
         device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -53,7 +53,8 @@ def evaluate_model(model=None, tokenizer=None, device=None):
         # Running as part of an experiment loop
         model.eval()
     
-    with open('math_eval_100.txt', 'r', encoding='utf-8') as f:
+    eval_file = 'math_eval_100_old.txt' if use_old_data else 'math_eval_100.txt'
+    with open(eval_file, 'r', encoding='utf-8') as f:
         content = f.read().split('\n\n')
         
     results = {'+': {'correct': 0, 'total': 0},
@@ -72,9 +73,9 @@ def evaluate_model(model=None, tokenizer=None, device=None):
         
         context = torch.tensor(tokenizer.encode(prompt), dtype=torch.long, device=device).unsqueeze(0)
         
-        # Generate up to 100 tokens (enough to finish thought process)
+        # Generate up to 256 tokens (enough to finish the long FOIL thought process)
         with torch.no_grad():
-            context = model.generate_next_token(context, max_new_tokens=100)
+            context = model.generate_next_token(context, max_new_tokens=256)
                     
         generated_text = tokenizer.decode(context[0].tolist())
         

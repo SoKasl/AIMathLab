@@ -3,24 +3,41 @@ import torch.optim as optim
 import tiktoken
 import csv
 import time
-from model import GPT
+import argparse
+from model import GPT, config
 from data_loader import get_dataloaders
 from evaluate import evaluate_model
 
-def run_experiment():
+def run_experiment(args):
+    # Enable features based on argparse flags
+    config.use_flash_attention = args.flash_attention
+    config.use_flash_attention_educational = args.flash_attention_educational
+    config.use_swiglu = args.swiglu
+    config.use_rmsnorm = args.rmsnorm
+    config.use_rope = args.rope
+    
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     tokenizer = tiktoken.get_encoding("gpt2")
     
-    wiki_intervals = [100, 5000, 10000, 15000, 20000]
+    wiki_intervals = [100, 5000, 10000, 20000]
+    if args.max_wiki_steps not in wiki_intervals:
+        wiki_intervals.append(args.max_wiki_steps)
+    wiki_intervals = sorted(wiki_intervals)
+    
     math_eval_points = [0, 1000, 2000, 3000, 4000, 5000]
     
     # Initialize CSV
-    csv_file = "experiment_results.csv"
+    csv_file = args.csv_output
     with open(csv_file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["Wiki_Steps", "Math_Steps", "Elapsed_Time_sec", "Overall_Acc", "Add_Acc", "Sub_Acc", "Mul_Acc", "Div_Acc"])
         
     print(f"Starting experiment! Logging to {csv_file}")
+    print(f"Flash Attention Enabled: {config.use_flash_attention}")
+    print(f"Educational Flash Attention Enabled: {config.use_flash_attention_educational}")
+    print(f"SwiGLU Enabled: {config.use_swiglu}")
+    print(f"RMSNorm Enabled: {config.use_rmsnorm}")
+    print(f"RoPE Enabled: {config.use_rope}")
     start_time = time.time()
     
     for wiki_step in wiki_intervals:
@@ -31,7 +48,9 @@ def run_experiment():
         optimizer = optim.AdamW(model.parameters(), lr=3e-4)
         
         # 2. Get fresh dataloaders
-        wiki_loader, math_train_loader, _ = get_dataloaders(batch_size=4, block_size=256)
+        # Keeping block size at 256 for an exact 1:1 architectural comparison
+        b_size = 256
+        wiki_loader, math_train_loader, _ = get_dataloaders(batch_size=4, block_size=b_size, use_old_data=args.use_old_math_data)
         
         # 3. Pretrain on WikiText
         model.train()
@@ -81,7 +100,7 @@ def run_experiment():
             
             # Evaluate at the current eval point
             print(f"\nEvaluating Math at step {current_math_step} for {wiki_step} Wiki steps...")
-            accs = evaluate_model(model, tokenizer, device)
+            accs = evaluate_model(model, tokenizer, device, use_old_data=args.use_old_math_data)
             
             elapsed = time.time() - start_time
             with open(csv_file, 'a', newline='') as f:
@@ -91,4 +110,15 @@ def run_experiment():
     print(f"\nExperiment Complete! Results saved to {csv_file}")
 
 if __name__ == "__main__":
-    run_experiment()
+    parser = argparse.ArgumentParser(description="Run LLM Math Training Experiment")
+    parser.add_argument("--flash_attention", action="store_true", help="Use PyTorch optimized flash attention")
+    parser.add_argument("--flash_attention_educational", action="store_true", help="Use educational flash attention")
+    parser.add_argument("--swiglu", action="store_true", help="Use SwiGLU activation instead of standard GELU FeedForward")
+    parser.add_argument("--rmsnorm", action="store_true", help="Use RMSNorm instead of standard LayerNorm")
+    parser.add_argument("--rope", action="store_true", help="Use Rotary Position Embeddings (RoPE) instead of absolute pos embeddings")
+    parser.add_argument("--csv_output", type=str, default="experiment_results.csv", help="Output CSV filename")
+    parser.add_argument("--use_old_math_data", action="store_true", help="Use the old non-CoT math datasets")
+    parser.add_argument("--max_wiki_steps", type=int, default=20000, help="Maximum WikiText pretraining steps to test")
+    args = parser.parse_args()
+    
+    run_experiment(args)

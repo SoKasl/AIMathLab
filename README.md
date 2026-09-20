@@ -22,6 +22,96 @@ The `Mini-GPT` is configured with the following default parameters (which can be
 *   **Embedding Dimension**: 384
 *   **Context Length (Timesteps)**: 256 tokens
 
+### Hierarchical Architecture Breakdown
+While the code started as a classic GPT-2 replica, it has been heavily modernized to match the architectural standards of today's state-of-the-art models (like LLaMA 3, Mistral, and GPT-4).
+
+Instead of a single massive diagram, let's break down the architecture from the bottom-up, exploring how each class is built and exactly where the modern optimizations fit in.
+
+#### 1. `Head` Class (Single Attention Head)
+The smallest building block. It takes a sequence of embeddings and computes their mutual "affinities" (attention scores).
+
+```mermaid
+graph TD
+    classDef base fill:#fff,stroke:#333,stroke-width:2px;
+    classDef upgrade fill:#d4edda,stroke:#28a745,stroke-width:2px;
+    
+    Input --> QKV[Q, K, V Linear Projections]:::base
+    QKV -.->|Optional Upgrade| RoPE[RoPE: Rotary Position Embeddings]:::upgrade
+    RoPE --> Mask[Causal Triangular Mask]:::base
+    Mask --> DotProduct[Scaled Dot-Product / Softmax]:::base
+```
+
+#### 2. `MultiHeadAttention` Class
+Groups multiple `Head` classes together so the model can pay attention to different concepts simultaneously, or bypasses them entirely for a highly optimized core.
+
+```mermaid
+graph TD
+    classDef base fill:#fff,stroke:#333,stroke-width:2px;
+    classDef upgrade fill:#d4edda,stroke:#28a745,stroke-width:2px;
+    
+    Input --> Split[Split into N Heads]:::base
+    Split -.->|Optional Core Upgrade| Flash[Flash Attention Core / Educational Flash]:::upgrade
+    Split --> Heads[N x Head Classes]:::base
+    
+    Flash --> Proj[Linear Projection]:::base
+    Heads --> Proj
+```
+
+#### 3. `Block` Class (Transformer Layer)
+The core loop. It combines "communication" (Attention) with "computation" (FeedForward), wrapped in normalization and residual connections.
+
+```mermaid
+graph TD
+    classDef base fill:#fff,stroke:#333,stroke-width:2px;
+    classDef upgrade fill:#d4edda,stroke:#28a745,stroke-width:2px;
+    classDef removed fill:#f8d7da,stroke:#dc3545,stroke-width:2px,stroke-dasharray: 5 5;
+    
+    Input --> Norm1[LayerNorm]:::removed
+    Input -.->|Optional Upgrade| RMS1[RMSNorm]:::upgrade
+    
+    RMS1 --> Attn[MultiHeadAttention Class]:::base
+    Attn --> Res1((+))
+    Input --> Res1
+    
+    Res1 --> Norm2[LayerNorm]:::removed
+    Res1 -.->|Optional Upgrade| RMS2[RMSNorm]:::upgrade
+    
+    RMS2 --> FFN[Classic FeedForward MLP]:::removed
+    RMS2 -.->|Optional Upgrade| SwiGLU[SwiGLU Network]:::upgrade
+    
+    SwiGLU --> Res2((+))
+    Res1 --> Res2
+```
+
+#### 4. `GPT` Class (Full Model)
+The outer wrapper that manages embeddings, stacks the `Block` classes, and projects the final output back into vocabulary logits.
+
+```mermaid
+graph TD
+    classDef base fill:#fff,stroke:#333,stroke-width:2px;
+    classDef upgrade fill:#d4edda,stroke:#28a745,stroke-width:2px;
+    classDef removed fill:#f8d7da,stroke:#dc3545,stroke-width:2px,stroke-dasharray: 5 5;
+    
+    Idx[Token Indices] --> TokEmb[token_embedding_table]:::base
+    Idx --> PosEmb[Absolute position_embedding_table]:::removed
+    
+    TokEmb -.->|If RoPE enabled| Bypass[Bypass Absolute Positions]:::upgrade
+    PosEmb --> Add((+))
+    TokEmb --> Add
+    
+    Bypass --> Blocks[Stack of N Block Classes]:::base
+    Add --> Blocks
+    
+    Blocks --> FinalNorm[Final Norm / RMSNorm]:::base
+    FinalNorm --> LMHead[lm_head Linear Projection]:::base
+```
+
+#### The Upgrades Breakdown:
+1. **[Flash Attention](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L126):** Modifies `MultiHeadAttention` to bypass the slow, explicit `Head` loops and compute attention matrices in ultra-fast, SRAM-aware chunks.
+2. **[SwiGLU](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L202-L215):** Replaced the classic `FeedForward` MLP inside `Block`. It uses a dual-pathway gating mechanism with a Swish activation, giving the model an internal "if/else" mechanism that massively improves arithmetic and conditional reasoning.
+3. **[RMSNorm](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L228-L242):** Conditionally swaps `nn.LayerNorm` inside `Block` and `GPT`. By dropping the computationally expensive mean-centering step, it speeds up the network without sacrificing stability.
+4. **[RoPE (Rotary Position Embeddings)](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L47-L53):** We conditionally bypass the `position_embedding_table` at the start of `GPT`. Instead, positional information is mathematically injected directly into the Query and Key vectors inside `Head` and `MultiHeadAttention`. Because the Attention block uses a dot product (measuring angles), this rotation perfectly encodes the *relative* distance between tokens, no matter how deep the network gets.
+
 ## Mathematical Reasoning & Chain-of-Thought
 
 Because Transformers have a fixed depth, they possess a hard limit on the amount of computation they can perform in a single forward pass. To enable the model to solve complex arithmetic, we generate our math datasets with explicit `<thought>` tags. 

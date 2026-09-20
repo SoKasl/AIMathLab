@@ -20,6 +20,7 @@ class ModelConfig:
     use_flash_attention_educational: bool = False
     use_swiglu: bool = False
     use_rmsnorm: bool = False
+    use_rope: bool = False
     use_moe: bool = False
     use_kv_cache: bool = False
 
@@ -32,6 +33,43 @@ n_layer = config.n_layer
 block_size = config.block_size
 dropout = config.dropout
 
+def precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):
+    """
+    Precomputes the complex frequencies for RoPE.
+    Think of this as creating a 'clock face' of angles for every possible position 
+    in the sequence (up to 'end').
+    - dim: the dimension of the head (head_size)
+    - end: max sequence length (config.block_size)
+    Returns a tensor of complex numbers (polar coordinates) representing the rotations.
+    """
+    freqs = 1.0 / (theta ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))
+    t = torch.arange(end, device=freqs.device, dtype=torch.float32)
+    freqs = torch.outer(t, freqs)
+    return torch.polar(torch.ones_like(freqs), freqs)
+
+def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
+    """
+    Helper function to reshape the 1D precomputed frequencies so they can be broadcast 
+    and multiplied across the higher-dimensional Query and Key tensors (Batch, Heads, SeqLen, HeadDim).
+    """
+    ndim = x.ndim
+    shape = [d if i == 1 or i == ndim - 1 else 1 for i, d in enumerate(x.shape)]
+    return freqs_cis.view(*shape)
+
+def apply_rotary_emb(xq: torch.Tensor, xk: torch.Tensor, freqs_cis: torch.Tensor):
+    """
+    Takes the Query (xq) and Key (xk) tensors and rotates them by the precomputed frequencies.
+    1. Reshapes the real numbers into pairs (2D coordinates) and casts them to Complex numbers.
+    2. Multiplies them by the Complex frequencies (which mathematically rotates them).
+    3. Casts them back to Real numbers and flattens them back to their original shape.
+    """
+    xq_ = torch.view_as_complex(xq.float().reshape(*xq.shape[:-1], -1, 2))
+    xk_ = torch.view_as_complex(xk.float().reshape(*xk.shape[:-1], -1, 2))
+    freqs_cis = reshape_for_broadcast(freqs_cis, xq_)
+    xq_out = torch.view_as_real(xq_ * freqs_cis).flatten(-2)
+    xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(-2)
+    return xq_out.type_as(xq), xk_out.type_as(xk)
+
 class Head(nn.Module):
     """ One head of self-attention """
     def __init__(self, head_size, config):
@@ -42,12 +80,22 @@ class Head(nn.Module):
         # Register a buffer for the causal mask (so the model can't look ahead)
         self.register_buffer('tril', torch.tril(torch.ones(config.block_size, config.block_size)))
         self.dropout = nn.Dropout(config.dropout)
+        self.config = config
+        if config.use_rope:
+            self.register_buffer('freqs_cis', precompute_freqs_cis(head_size, config.block_size))
 
     def forward(self, x):
         B, T, C = x.shape
         k = self.key(x)   # (B, T, head_size)
         q = self.query(x) # (B, T, head_size)
         
+        if self.config.use_rope:
+            q = q.unsqueeze(2)
+            k = k.unsqueeze(2)
+            q, k = apply_rotary_emb(q, k, self.freqs_cis[:T])
+            q = q.squeeze(2)
+            k = k.squeeze(2)
+            
         # Compute attention scores ("affinities")
         wei = q @ k.transpose(-2, -1) * k.shape[-1]**-0.5
         wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf')) # Causal mask
@@ -92,6 +140,8 @@ class MultiHeadAttention(nn.Module):
             self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd, bias=False)
             self.c_proj = nn.Linear(config.n_embd, config.n_embd)
             self.dropout = nn.Dropout(config.dropout)
+            if config.use_rope:
+                self.register_buffer('freqs_cis', precompute_freqs_cis(config.n_embd // config.n_head, config.block_size))
 
     def forward(self, x):
         """ Routes to the correct attention implementation based on ModelConfig """
@@ -116,10 +166,17 @@ class MultiHeadAttention(nn.Module):
         qkv = self.c_attn(x)
         q, k, v = qkv.split(self.n_embd, dim=2)
         
-        # 2. Reshape into (Batch, Heads, Sequence Length, Head Size)
-        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        # 2. Reshape into (Batch, Sequence Length, Heads, Head Size)
+        k = k.view(B, T, self.n_head, C // self.n_head)
+        q = q.view(B, T, self.n_head, C // self.n_head)
+        v = v.view(B, T, self.n_head, C // self.n_head)
+        
+        if self.config.use_rope:
+            q, k = apply_rotary_emb(q, k, self.freqs_cis[:T])
+            
+        k = k.transpose(1, 2)
+        q = q.transpose(1, 2)
+        v = v.transpose(1, 2)
         
         # 3. Flash Attention Magic!
         # is_causal=True automatically handles the lower-triangular masking so the model can't look ahead.
@@ -146,9 +203,16 @@ class MultiHeadAttention(nn.Module):
         q, k, v = qkv.split(self.n_embd, dim=2)
         
         # Reshape
-        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        k = k.view(B, T, self.n_head, C // self.n_head)
+        q = q.view(B, T, self.n_head, C // self.n_head)
+        v = v.view(B, T, self.n_head, C // self.n_head)
+        
+        if self.config.use_rope:
+            q, k = apply_rotary_emb(q, k, self.freqs_cis[:T])
+            
+        k = k.transpose(1, 2)
+        q = q.transpose(1, 2)
+        v = v.transpose(1, 2)
         
         # Tile sizes (blocks to load into "SRAM")
         Br = 32
@@ -206,6 +270,29 @@ class MultiHeadAttention(nn.Module):
         out = self.dropout(self.c_proj(y))
         return out
 
+class SwiGLU(nn.Module):
+    """ 
+    Swish-Gated Linear Unit (SwiGLU)
+    Replaces the standard MLP block. Uses a multiplicative gate with SiLU activation.
+    """
+    def __init__(self, config):
+        super().__init__()
+        # Industry standard: scale by 8/3 to keep parameters roughly identical to a 4x standard MLP
+        hidden_dim = int(8 * config.n_embd / 3)
+        # Often rounded to a multiple of 16 for hardware efficiency, but we'll stick to exact 8/3 for simplicity
+        
+        self.w1 = nn.Linear(config.n_embd, hidden_dim, bias=False) # Gate projection
+        self.w3 = nn.Linear(config.n_embd, hidden_dim, bias=False) # Up projection
+        self.w2 = nn.Linear(hidden_dim, config.n_embd, bias=False) # Down projection
+        self.dropout = nn.Dropout(config.dropout)
+
+    def forward(self, x):
+        # SwiGLU(x, W1, W2, W3) = W2 * ( Swish(W1 * x) ⊗ (W3 * x) )
+        # F.silu is PyTorch's implementation of the Swish activation function
+        gate = F.silu(self.w1(x))
+        up = self.w3(x)
+        return self.dropout(self.w2(gate * up))
+
 class FeedForward(nn.Module):
     """ A simple linear layer followed by a non-linearity """
     def __init__(self, config):
@@ -220,14 +307,38 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.net(x)
 
+class RMSNorm(nn.Module):
+    """
+    Root Mean Square Normalization
+    Replaces LayerNorm. Drops the mean-centering step for faster computation.
+    """
+    def __init__(self, dim, eps=1e-6):
+        super().__init__()
+        self.eps = eps
+        self.weight = nn.Parameter(torch.ones(dim))
+
+    def forward(self, x):
+        # x.pow(2).mean() calculates the variance (mean of squared values)
+        # We don't subtract the mean like LayerNorm does
+        x_norm = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
+        return self.weight * x_norm
+
 class Block(nn.Module):
     """ Transformer block: communication (attention) followed by computation (feed-forward) """
     def __init__(self, config):
         super().__init__()
         self.sa = MultiHeadAttention(config)
-        self.ffwd = FeedForward(config)
-        self.ln1 = nn.LayerNorm(config.n_embd)
-        self.ln2 = nn.LayerNorm(config.n_embd)
+        
+        # Route to SwiGLU if flag is set, else fallback to classic FeedForward
+        if config.use_swiglu:
+            self.ffwd = SwiGLU(config)
+        else:
+            self.ffwd = FeedForward(config)
+            
+        # Route to RMSNorm if flag is set, else fallback to classic LayerNorm
+        NormLayer = RMSNorm if config.use_rmsnorm else nn.LayerNorm
+        self.ln1 = NormLayer(config.n_embd)
+        self.ln2 = NormLayer(config.n_embd)
 
     def forward(self, x):
         # Residual connections around the attention and feed-forward
@@ -249,7 +360,10 @@ class GPT(nn.Module):
         
         # Sequence of transformer blocks
         self.blocks = nn.Sequential(*[Block(self.config) for _ in range(self.config.n_layer)])
-        self.ln_f = nn.LayerNorm(self.config.n_embd) # final layer norm
+        
+        NormLayer = RMSNorm if self.config.use_rmsnorm else nn.LayerNorm
+        self.ln_f = NormLayer(self.config.n_embd) # final normalization
+        
         self.lm_head = nn.Linear(self.config.n_embd, self.config.vocab_size) # outputs probability distribution over vocab
         
         # Initialize weights properly
@@ -268,9 +382,13 @@ class GPT(nn.Module):
 
         # idx and targets are both (B,T) tensor of integers
         tok_emb = self.token_embedding_table(idx) # (B,T,C)
-        pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device)) # (T,C)
         
-        x = tok_emb + pos_emb # Combine token and position information
+        if not self.config.use_rope:
+            pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device)) # (T,C)
+            x = tok_emb + pos_emb # Combine token and position information
+        else:
+            x = tok_emb
+            
         x = self.blocks(x) # Pass through transformer blocks
         x = self.ln_f(x)
         logits = self.lm_head(x) # (B,T,vocab_size)

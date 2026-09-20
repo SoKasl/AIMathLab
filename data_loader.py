@@ -75,13 +75,16 @@ class SyntheticMathDataset(Dataset):
         y = chunk[1:]
         return x, y
 
-def get_dataloaders(batch_size=4, block_size=256):
+def get_dataloaders(batch_size=4, block_size=256, use_old_data=False):
     """ Helper function to easily get our dataloaders in the training script """
     wiki_dataset = WikiTextDataset(split='train', block_size=block_size)
     
+    train_file = "math_train_old.txt" if use_old_data else "math_train.txt"
+    eval_file = "math_eval_old.txt" if use_old_data else "math_eval.txt"
+    
     # Load our persisted math datasets
-    math_train_dataset = SyntheticMathDataset("math_train.txt", block_size=block_size)
-    math_eval_dataset = SyntheticMathDataset("math_eval.txt", block_size=block_size)
+    math_train_dataset = SyntheticMathDataset(train_file, block_size=block_size)
+    math_eval_dataset = SyntheticMathDataset(eval_file, block_size=block_size)
     
     # DataLoader handles batching (grabbing 4 sequences at a time) and shuffling
     wiki_loader = DataLoader(wiki_dataset, batch_size=batch_size, shuffle=True)

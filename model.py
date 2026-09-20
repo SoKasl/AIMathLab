@@ -17,6 +17,7 @@ class ModelConfig:
     dropout: float = 0.2
     
     use_flash_attention: bool = False
+    use_flash_attention_educational: bool = False
     use_swiglu: bool = False
     use_rmsnorm: bool = False
     use_moe: bool = False
@@ -59,18 +60,150 @@ class Head(nn.Module):
         return out
 
 class MultiHeadAttention(nn.Module):
-    """ Multiple heads of self-attention in parallel """
+    """ 
+    Multiple heads of self-attention in parallel.
+    
+    EDUCATIONAL NOTE: Flash Attention
+    ---------------------------------
+    Classic attention computes a massive (Sequence_Length x Sequence_Length) matrix of probabilities.
+    This takes O(N^2) memory and is extremely slow.
+    Flash Attention is a "hardware-aware" optimization. It computes this exact same math directly 
+    inside the GPU's ultra-fast SRAM in chunks, completely bypassing the slow main VRAM.
+    Result: 2x-3x faster training and significantly less memory usage, with mathematically identical outputs!
+    """
     def __init__(self, config):
         super().__init__()
-        head_size = config.n_embd // config.n_head
-        self.heads = nn.ModuleList([Head(head_size, config) for _ in range(config.n_head)])
-        self.proj = nn.Linear(head_size * config.n_head, config.n_embd)
-        self.dropout = nn.Dropout(config.dropout)
+        self.config = config
+        
+        if not config.use_flash_attention and not config.use_flash_attention_educational:
+            # --- CLASSIC SLOW ATTENTION SETUP ---
+            head_size = config.n_embd // config.n_head
+            self.heads = nn.ModuleList([Head(head_size, config) for _ in range(config.n_head)])
+            self.proj = nn.Linear(head_size * config.n_head, config.n_embd)
+            self.dropout = nn.Dropout(config.dropout)
+        else:
+            # --- FLASH / EDUCATIONAL ATTENTION SETUP ---
+            self.n_head = config.n_head
+            self.n_embd = config.n_embd
+            self.dropout_val = config.dropout
+            
+            # Instead of separate heads, we create one massive linear layer that computes
+            # Query, Key, and Value for ALL heads simultaneously! 
+            self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd, bias=False)
+            self.c_proj = nn.Linear(config.n_embd, config.n_embd)
+            self.dropout = nn.Dropout(config.dropout)
 
     def forward(self, x):
-        # Concatenate the outputs of all heads
+        """ Routes to the correct attention implementation based on ModelConfig """
+        if not self.config.use_flash_attention and not self.config.use_flash_attention_educational:
+            return self._forward_classic(x)
+        elif self.config.use_flash_attention:
+            return self._forward_flash(x)
+        else:
+            return self._forward_flash_educational(x)
+
+    def _forward_classic(self, x):
+        """ CLASSIC: Loop through every head individually (slow) """
         out = torch.cat([h(x) for h in self.heads], dim=-1)
         out = self.dropout(self.proj(out))
+        return out
+
+    def _forward_flash(self, x):
+        """ FLASH: Compute everything at once in massive batches (fast) """
+        B, T, C = x.size() # Batch size, Sequence Length, Embedding Dimension
+        
+        # 1. Calculate Q, K, V for all heads in one shot
+        qkv = self.c_attn(x)
+        q, k, v = qkv.split(self.n_embd, dim=2)
+        
+        # 2. Reshape into (Batch, Heads, Sequence Length, Head Size)
+        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        
+        # 3. Flash Attention Magic!
+        # is_causal=True automatically handles the lower-triangular masking so the model can't look ahead.
+        # We don't even need our 'tril' mask buffer anymore!
+        y = F.scaled_dot_product_attention(q, k, v, attn_mask=None, 
+                                           dropout_p=self.dropout_val if self.training else 0.0, 
+                                           is_causal=True)
+        
+        # 4. Re-assemble the heads back into a flat sequence
+        y = y.transpose(1, 2).contiguous().view(B, T, C)
+        
+        # 5. Final projection
+        out = self.dropout(self.c_proj(y))
+        return out
+
+    def _forward_flash_educational(self, x):
+        """ 
+        EDUCATIONAL FLASH ATTENTION FROM SCRATCH
+        This implements the block-tiling algorithm in pure Python so learners can read the math.
+        WARNING: This will run much slower than Classic or Flash because Python is slow.
+        """
+        B, T, C = x.size()
+        qkv = self.c_attn(x)
+        q, k, v = qkv.split(self.n_embd, dim=2)
+        
+        # Reshape
+        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        
+        # Tile sizes (blocks to load into "SRAM")
+        Br = 32
+        Bc = 32
+        
+        O = torch.zeros_like(q)
+        l = torch.zeros((B, self.n_head, T, 1), device=q.device)
+        m = torch.full((B, self.n_head, T, 1), float('-inf'), device=q.device)
+        d = q.shape[-1]
+        
+        # Outer loop: Query blocks
+        for i in range(0, T, Br):
+            q_i = q[:, :, i:i+Br, :]
+            
+            # Inner loop: Key/Value blocks
+            for j in range(0, T, Bc):
+                # Skip blocks that are entirely in the future (causal mask logic)
+                if j > i + Br - 1:
+                    continue
+
+                k_j = k[:, :, j:j+Bc, :]
+                v_j = v[:, :, j:j+Bc, :]
+
+                # 1. Compute block-wise affinities
+                S_ij = q_i @ k_j.transpose(-2, -1) / (d ** 0.5)
+
+                # 2. Apply precise block causal masking
+                row_idx = torch.arange(i, i + q_i.shape[2], device=q.device).unsqueeze(1)
+                col_idx = torch.arange(j, j + k_j.shape[2], device=q.device).unsqueeze(0)
+                mask = row_idx >= col_idx
+                S_ij = S_ij.masked_fill(~mask, float('-inf'))
+
+                # 3. Online Softmax Trick (keep running maximums and sums)
+                m_i_prev = m[:, :, i:i+Br, :]
+                l_i_prev = l[:, :, i:i+Br, :]
+
+                m_ij, _ = torch.max(S_ij, dim=-1, keepdim=True)
+                m_i_new = torch.maximum(m_i_prev, m_ij)
+
+                P_ij = torch.exp(S_ij - m_i_new)
+                l_i_new = torch.exp(m_i_prev - m_i_new) * l_i_prev + torch.sum(P_ij, dim=-1, keepdim=True)
+
+                # 4. Multiply by V and accumulate output
+                O_i_prev = O[:, :, i:i+Br, :]
+                O[:, :, i:i+Br, :] = torch.exp(m_i_prev - m_i_new) * O_i_prev + P_ij @ v_j
+
+                m[:, :, i:i+Br, :] = m_i_new
+                l[:, :, i:i+Br, :] = l_i_new
+
+        # 5. Divide output by running sum to normalize
+        y = O / l
+        
+        # Re-assemble
+        y = y.transpose(1, 2).contiguous().view(B, T, C)
+        out = self.dropout(self.c_proj(y))
         return out
 
 class FeedForward(nn.Module):

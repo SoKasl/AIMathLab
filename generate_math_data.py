@@ -3,7 +3,6 @@ import os
 
 def generate_addition_reasoning(a, b):
     """ Generates 3-digit addition with step-by-step reasoning """
-    # e.g., 123 + 456
     a_100, a_10, a_1 = (a // 100) * 100, ((a // 10) % 10) * 10, a % 10
     b_100, b_10, b_1 = (b // 100) * 100, ((b // 10) % 10) * 10, b % 10
     
@@ -14,22 +13,87 @@ def generate_addition_reasoning(a, b):
     return f"Q: What is {a} + {b}?\nA: <thought> {a} + {b} = {step1} = {step2} </thought> {ans}\n\n"
 
 def generate_subtraction_reasoning(a, b):
-    """ Generates 3-digit subtraction with step-by-step reasoning (a > b) """
-    a_100, a_10, a_1 = (a // 100) * 100, ((a // 10) % 10) * 10, a % 10
-    b_100, b_10, b_1 = (b // 100) * 100, ((b // 10) % 10) * 10, b % 10
-    
-    step1 = f"{a_100} - {b_100} + {a_10} - {b_10} + {a_1} - {b_1}"
-    step2 = f"{a_100 - b_100} + {a_10 - b_10} + {a_1 - b_1}"
+    """ Generates 3-digit subtraction with human-like borrowing """
     ans = a - b
     
-    return f"Q: What is {a} - {b}?\nA: <thought> {a} - {b} = {step1} = {step2} </thought> {ans}\n\n"
+    a_100, a_10, a_1 = a // 100, (a // 10) % 10, a % 10
+    b_100, b_10, b_1 = b // 100, (b // 10) % 10, b % 10
+    
+    ones_step = f"{a_1} ones - {b_1} ones"
+    if a_1 < b_1:
+        ones_step += f" (borrow 10) -> {a_1 + 10} - {b_1} = {a_1 + 10 - b_1}"
+        a_10 -= 1
+        val_1 = a_1 + 10 - b_1
+    else:
+        ones_step += f" -> {a_1} - {b_1} = {a_1 - b_1}"
+        val_1 = a_1 - b_1
+        
+    tens_step = f"{a_10} tens - {b_10} tens"
+    if a_10 < b_10:
+        tens_step += f" (borrow 100) -> {a_10 * 10 + 100} - {b_10 * 10} = {a_10 * 10 + 100 - b_10 * 10}"
+        a_100 -= 1
+        val_10 = a_10 * 10 + 100 - b_10 * 10
+    else:
+        tens_step += f" -> {a_10 * 10} - {b_10 * 10} = {a_10 * 10 - b_10 * 10}"
+        val_10 = a_10 * 10 - b_10 * 10
+        
+    hundreds_step = f"{a_100} hundreds - {b_100} hundreds -> {a_100 * 100} - {b_100 * 100} = {a_100 * 100 - b_100 * 100}"
+    val_100 = a_100 * 100 - b_100 * 100
+    
+    return f"Q: What is {a} - {b}?\nA: <thought> {ones_step}. {tens_step}. {hundreds_step}. Answer = {val_100} + {val_10} + {val_1} = {ans} </thought> {ans}\n\n"
 
-def generate_simple_equation(a, b, op):
-    """ Standard output for multiplication and division to keep it simple """
-    if op == '*':
-        return f"Q: What is {a} * {b}?\nA: <thought> Calculating {a} times {b} </thought> {a * b}\n\n"
-    elif op == '/':
-        return f"Q: What is {a} / {b}?\nA: <thought> Calculating {a} divided by {b} </thought> {a // b}\n\n"
+def generate_multiplication_reasoning(a, b):
+    """ Generates 3-digit multiplication using the Grid (FOIL) method """
+    a_parts = []
+    if a // 100 > 0: a_parts.append((a // 100) * 100)
+    if (a // 10) % 10 > 0: a_parts.append(((a // 10) % 10) * 10)
+    if a % 10 > 0: a_parts.append(a % 10)
+    
+    b_parts = []
+    if b // 100 > 0: b_parts.append((b // 100) * 100)
+    if (b // 10) % 10 > 0: b_parts.append(((b // 10) % 10) * 10)
+    if b % 10 > 0: b_parts.append(b % 10)
+    
+    a_str = " + ".join(str(p) for p in a_parts) if len(a_parts) > 1 else str(a)
+    b_str = " + ".join(str(p) for p in b_parts) if len(b_parts) > 1 else str(b)
+    
+    foil_strs = []
+    foil_vals = []
+    for p_a in a_parts:
+        for p_b in b_parts:
+            foil_strs.append(f"({p_a} * {p_b})")
+            foil_vals.append(p_a * p_b)
+            
+    foil_str_joined = " + ".join(foil_strs)
+    foil_vals_joined = " + ".join(str(v) for v in foil_vals)
+    
+    ans = a * b
+    
+    thought = f"{a} * {b}"
+    if len(a_parts) > 1 or len(b_parts) > 1:
+        thought += f" = ({a_str}) * ({b_str}) = {foil_str_joined} = {foil_vals_joined}"
+    
+    return f"Q: What is {a} * {b}?\nA: <thought> {thought} = {ans} </thought> {ans}\n\n"
+
+def generate_division_reasoning(a, b):
+    """ Generates division using partial quotients """
+    c = a // b
+    c_parts = []
+    if c // 100 > 0: c_parts.append((c // 100) * 100)
+    if (c // 10) % 10 > 0: c_parts.append(((c // 10) % 10) * 10)
+    if c % 10 > 0: c_parts.append(c % 10)
+    
+    steps = []
+    current_rem = a
+    for p in c_parts:
+        prod = b * p
+        current_rem -= prod
+        steps.append(f"{b} * {p} = {prod}, remaining = {current_rem}")
+    
+    steps_str = ". ".join(steps)
+    ans_sum_str = " + ".join(str(p) for p in c_parts) if len(c_parts) > 1 else str(c)
+    
+    return f"Q: What is {a} / {b}?\nA: <thought> {a} / {b}: {steps_str}. Answer = {ans_sum_str} = {c} </thought> {c}\n\n"
 
 def generate_datasets():
     used_equations = set()
@@ -57,8 +121,10 @@ def generate_datasets():
             text = generate_addition_reasoning(a, b)
         elif op == '-':
             text = generate_subtraction_reasoning(a, b)
-        else:
-            text = generate_simple_equation(a, b, op)
+        elif op == '*':
+            text = generate_multiplication_reasoning(a, b)
+        elif op == '/':
+            text = generate_division_reasoning(a, b)
             
         train_data.append(text)
         
@@ -83,8 +149,10 @@ def generate_datasets():
             text = generate_addition_reasoning(a, b)
         elif op == '-':
             text = generate_subtraction_reasoning(a, b)
-        else:
-            text = generate_simple_equation(a, b, op)
+        elif op == '*':
+            text = generate_multiplication_reasoning(a, b)
+        elif op == '/':
+            text = generate_division_reasoning(a, b)
             
         eval_data.append(text)
         

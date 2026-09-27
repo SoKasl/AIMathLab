@@ -74,3 +74,23 @@ Q: What is 123 + 456?
 A: <thought> 123 + 456 = 100 + 400 + 20 + 50 + 3 + 6 = 500 + 70 + 9 </thought> 579
 ```
 This allowed the model to reach 36% accuracy even in the baseline run. We kept this logic unchanged.
+
+---
+
+## 5. Curriculum Learning
+
+Even with the FOIL step-by-step logic, models often struggle because they don't intrinsically "know" that `800 * 600 = 480000`. They have to predict it based on token patterns. To fix this, we implemented **Curriculum Learning**.
+
+We deliberately injected thousands of one-digit multiplication and division lookup tables directly into the dataset *before* the 3-digit problems. 
+
+### ✅ Curriculum Lookups
+We format these as explicit memorization steps:
+```text
+Q: What is 8 * 7?
+A: <thought> cl: 8 * 7 = 56 </thought> 56
+
+Q: What is 63 / 9?
+A: <thought> cl: 63 / 9 = 7 </thought> 7
+```
+
+By teaching the model these foundational facts (and aggressively repeating them 50x in the dataset), it can flawlessly retrieve these "memorized" lookups later when executing the complex FOIL algorithms!

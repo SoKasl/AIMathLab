@@ -11,11 +11,14 @@ __pycache__/
 *.pth
 
 # Generated Data
-math_train*.txt
-math_eval*.txt
+math_train*
+math_eval*
 
 # Experiment Results
 experiment_results.csv
+*_samples_*.txt
+test_run.csv
 
 # macOS
 .DS_Store
+

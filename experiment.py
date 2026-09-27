@@ -4,27 +4,30 @@ import tiktoken
 import csv
 import time
 import argparse
-from model import GPT, config
 from data_loader import get_dataloaders
 from evaluate import evaluate_model
 
 def run_experiment(args):
+    # Conditionally import model to keep base clean
+    if args.use_kv_cache:
+        from model_kv_cache import GPT, config
+    else:
+        from model import GPT, config
+        
     # Enable features based on argparse flags
     config.use_flash_attention = args.flash_attention
     config.use_flash_attention_educational = args.flash_attention_educational
     config.use_swiglu = args.swiglu
     config.use_rmsnorm = args.rmsnorm
     config.use_rope = args.rope
+    config.use_moe = args.moe
+    config.use_kv_cache = args.use_kv_cache
     
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     tokenizer = tiktoken.get_encoding("gpt2")
     
-    wiki_intervals = [100, 5000, 10000, 20000]
-    if args.max_wiki_steps not in wiki_intervals:
-        wiki_intervals.append(args.max_wiki_steps)
-    wiki_intervals = sorted(wiki_intervals)
-    
-    math_eval_points = [0, 1000, 2000, 3000, 4000, 5000]
+    wiki_intervals = sorted(args.wiki_intervals)
+    math_eval_points = sorted(args.math_eval_points)
     
     # Initialize CSV
     csv_file = args.csv_output
@@ -38,6 +41,7 @@ def run_experiment(args):
     print(f"SwiGLU Enabled: {config.use_swiglu}")
     print(f"RMSNorm Enabled: {config.use_rmsnorm}")
     print(f"RoPE Enabled: {config.use_rope}")
+    print(f"MoE Enabled: {config.use_moe}")
     start_time = time.time()
     
     for wiki_step in wiki_intervals:
@@ -50,7 +54,12 @@ def run_experiment(args):
         # 2. Get fresh dataloaders
         # Keeping block size at 256 for an exact 1:1 architectural comparison
         b_size = 256
-        wiki_loader, math_train_loader, _ = get_dataloaders(batch_size=4, block_size=b_size, use_old_data=args.use_old_math_data)
+        wiki_loader, math_train_loader, _ = get_dataloaders(
+            batch_size=4, 
+            block_size=b_size, 
+            use_old_data=args.use_old_math_data, 
+            use_curriculum_data=args.use_curriculum_data
+        )
         
         # 3. Pretrain on WikiText
         model.train()
@@ -64,7 +73,8 @@ def run_experiment(args):
                 
             x, y = x.to(device), y.to(device)
             optimizer.zero_grad()
-            logits, loss = model(x, y)
+            outputs = model(x, y)
+            logits, loss = outputs[0], outputs[1]
             loss.backward()
             optimizer.step()
             
@@ -74,6 +84,9 @@ def run_experiment(args):
         # 4. Math Alignment (Cumulative)
         current_math_step = 0
         math_iter = iter(math_train_loader)
+        
+        best_acc = -1.0
+        best_model_path = csv_file.replace(".csv", f"_best_model_wiki{wiki_step}.pt")
         
         for eval_point in math_eval_points:
             # Train up to the next eval point
@@ -90,7 +103,8 @@ def run_experiment(args):
                         
                     x, y = x.to(device), y.to(device)
                     optimizer.zero_grad()
-                    logits, loss = model(x, y)
+                    outputs = model(x, y)
+                    logits, loss = outputs[0], outputs[1]
                     loss.backward()
                     optimizer.step()
                     
@@ -100,14 +114,27 @@ def run_experiment(args):
             
             # Evaluate at the current eval point
             print(f"\nEvaluating Math at step {current_math_step} for {wiki_step} Wiki steps...")
-            accs = evaluate_model(model, tokenizer, device, use_old_data=args.use_old_math_data)
+            
+            sample_log_path = csv_file.replace(".csv", f"_samples_wiki{wiki_step}_math{current_math_step}.txt")
+            accs = evaluate_model(model, tokenizer, device, use_old_data=args.use_old_math_data, sample_log_path=sample_log_path)
             
             elapsed = time.time() - start_time
             with open(csv_file, 'a', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([wiki_step, current_math_step, f"{elapsed:.2f}", accs['overall'], accs['+'], accs['-'], accs['*'], accs['/']])
             
+            # Save the best model
+            if accs['overall'] > best_acc:
+                best_acc = accs['overall']
+                print(f"New best accuracy {best_acc}%! Saving model to {best_model_path}")
+                torch.save(model.state_dict(), best_model_path)
+            
+    # Save the final model weights just in case
+    model_save_path = csv_file.replace(".csv", "_final.pt")
+    torch.save(model.state_dict(), model_save_path)
     print(f"\nExperiment Complete! Results saved to {csv_file}")
+    print(f"Final model weights saved to {model_save_path}")
+    print(f"Best model weights saved to {best_model_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run LLM Math Training Experiment")
@@ -116,9 +143,13 @@ if __name__ == "__main__":
     parser.add_argument("--swiglu", action="store_true", help="Use SwiGLU activation instead of standard GELU FeedForward")
     parser.add_argument("--rmsnorm", action="store_true", help="Use RMSNorm instead of standard LayerNorm")
     parser.add_argument("--rope", action="store_true", help="Use Rotary Position Embeddings (RoPE) instead of absolute pos embeddings")
+    parser.add_argument("--moe", action="store_true", help="Use Sparse Mixture of Experts (MoE)")
     parser.add_argument("--csv_output", type=str, default="experiment_results.csv", help="Output CSV filename")
     parser.add_argument("--use_old_math_data", action="store_true", help="Use the old non-CoT math datasets")
-    parser.add_argument("--max_wiki_steps", type=int, default=20000, help="Maximum WikiText pretraining steps to test")
+    parser.add_argument("--use_curriculum_data", action="store_true", help="Use the new curriculum math datasets")
+    parser.add_argument("--use_kv_cache", action="store_true", help="Use KV cache during inference/evaluation")
+    parser.add_argument("--wiki_intervals", nargs="+", type=int, default=[100, 5000, 10000, 20000], help="List of Wiki steps")
+    parser.add_argument("--math_eval_points", nargs="+", type=int, default=[0, 1000, 2000, 3000, 4000, 5000], help="List of Math eval points")
     args = parser.parse_args()
     
     run_experiment(args)

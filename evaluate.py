@@ -33,7 +33,10 @@ def parse_equation_block(block):
         
     return prompt, expected, op
 
-def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False):
+def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False, sample_log_path=None):
+    if sample_log_path and os.path.exists(sample_log_path):
+        os.remove(sample_log_path) # Clear previous log for this step
+        
     if model is None:
         print("Initializing Standalone Evaluator...")
         device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -75,7 +78,10 @@ def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False):
         
         # Generate up to 256 tokens (enough to finish the long FOIL thought process)
         with torch.no_grad():
-            context = model.generate_next_token(context, max_new_tokens=256)
+            if getattr(model.config, 'use_kv_cache', False):
+                context = model.generate_with_cache(context, max_new_tokens=256)
+            else:
+                context = model.generate_next_token(context, max_new_tokens=256)
                     
         generated_text = tokenizer.decode(context[0].tolist())
         
@@ -92,6 +98,13 @@ def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False):
                 model_answer = numbers[-1]
                 
         is_correct = (model_answer == expected)
+        
+        if sample_log_path:
+            with open(sample_log_path, 'a', encoding='utf-8') as sf:
+                sf.write(f"=== Equation {count+1} (Correct: {is_correct}) ===\n")
+                sf.write(generated_text)
+                sf.write(f"\n\nExpected: {expected} | Extracted: {model_answer}\n")
+                sf.write("="*40 + "\n\n")
         
         results[op]['total'] += 1
         if is_correct:

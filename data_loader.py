@@ -61,26 +61,98 @@ class SyntheticMathDataset(Dataset):
         with open(filename, 'r', encoding='utf-8') as f:
             text = f.read()
             
-        # Tokenize the entire text block
-        self.data = tokenizer.encode(text)
-        self.data = torch.tensor(self.data, dtype=torch.long)
-        print(f"Loaded {len(self.data)} tokens from {filename}.")
+        # Parse problem by problem and pack them into dense 256-token blocks
+        blocks = text.strip().split('\n\n')
+        pad_token = 50256 # <|endoftext|> in GPT2
+        
+        parsed = []
+        for b in blocks:
+            b_str = b.strip()
+            if not b_str: continue
+            
+            # Split into prompt (question) and completion (thought + answer)
+            if '\nA:' in b_str:
+                parts = b_str.split('\nA:')
+                prompt_str = parts[0].strip() + '\nA:'
+                completion_str = parts[1]
+            else:
+                prompt_str = b_str
+                completion_str = ""
+                
+            p_tok = tokenizer.encode(prompt_str)
+            # Completion includes the EOS token so the model learns when to terminate
+            c_tok = tokenizer.encode(completion_str) + [pad_token]
+            
+            # Only include problems that can fit in a single block
+            if len(p_tok) + len(c_tok) <= block_size + 1:
+                parsed.append((p_tok, c_tok))
+                
+        # Pack complete problems into blocks of size block_size
+        self.samples = []
+        curr_tokens = []
+        curr_masks = []
+        
+        for p_tok, c_tok in parsed:
+            prob_len = len(p_tok) + len(c_tok)
+            # If adding this problem exceeds block_size + 1, finalize the current block
+            if len(curr_tokens) + prob_len > block_size + 1:
+                pad_len = block_size - len(curr_tokens[:-1])
+                x = curr_tokens[:-1] + [pad_token] * pad_len
+                y = curr_masks + [-100] * pad_len
+                self.samples.append((
+                    torch.tensor(x, dtype=torch.long),
+                    torch.tensor(y, dtype=torch.long)
+                ))
+                curr_tokens = []
+                curr_masks = []
+                
+            offset = len(curr_tokens)
+            curr_tokens.extend(p_tok + c_tok)
+            
+            # Target masks for this problem:
+            # Mask prompt tokens in y with -100 so loss is NOT computed on the prompt
+            if offset == 0:
+                for _ in range(len(p_tok) - 1):
+                    curr_masks.append(-100)
+            else:
+                # Transition token from previous problem's EOS to this problem's prompt -> mask with -100
+                curr_masks.append(-100)
+                for _ in range(len(p_tok) - 1):
+                    curr_masks.append(-100)
+            # Active loss on all completion tokens and EOS
+            curr_masks.extend(c_tok)
+            
+        # Finalize any remaining tokens
+        if curr_tokens:
+            pad_len = block_size - len(curr_tokens[:-1])
+            x = curr_tokens[:-1] + [pad_token] * pad_len
+            y = curr_masks + [-100] * pad_len
+            self.samples.append((
+                torch.tensor(x, dtype=torch.long),
+                torch.tensor(y, dtype=torch.long)
+            ))
+            
+        print(f"Loaded {len(self.samples)} sequence-packed math blocks from {filename}.")
 
     def __len__(self):
-        return len(self.data) - self.block_size
+        return len(self.samples)
 
     def __getitem__(self, idx):
-        chunk = self.data[idx : idx + self.block_size + 1]
-        x = chunk[:-1]
-        y = chunk[1:]
-        return x, y
+        return self.samples[idx]
 
-def get_dataloaders(batch_size=4, block_size=256, use_old_data=False):
+def get_dataloaders(batch_size=4, block_size=256, use_old_data=False, use_curriculum_data=False):
     """ Helper function to easily get our dataloaders in the training script """
     wiki_dataset = WikiTextDataset(split='train', block_size=block_size)
     
-    train_file = "math_train_old.txt" if use_old_data else "math_train.txt"
-    eval_file = "math_eval_old.txt" if use_old_data else "math_eval.txt"
+    if use_old_data:
+        train_file = "math_train_old.txt"
+        eval_file = "math_eval_old.txt"
+    elif use_curriculum_data:
+        train_file = "math_train_curriculum.txt"
+        eval_file = "math_eval_curriculum.txt"
+    else:
+        train_file = "math_train.txt"
+        eval_file = "math_eval.txt"
     
     # Load our persisted math datasets
     math_train_dataset = SyntheticMathDataset(train_file, block_size=block_size)

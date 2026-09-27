@@ -22,6 +22,8 @@ class ModelConfig:
     use_rmsnorm: bool = False
     use_rope: bool = False
     use_moe: bool = False
+    num_experts: int = 4
+    top_k_experts: int = 2
     use_kv_cache: bool = False
 
 # Global instance for backwards compatibility
@@ -323,14 +325,79 @@ class RMSNorm(nn.Module):
         x_norm = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
         return self.weight * x_norm
 
+class SparseMoE(nn.Module):
+    """
+    Sparse Mixture of Experts (MoE) layer.
+    Replaces a single dense FeedForward/SwiGLU with N experts and a router.
+    """
+    def __init__(self, config):
+        super().__init__()
+        self.num_experts = config.num_experts
+        self.top_k = config.top_k_experts
+        
+        # Initialize N experts (either SwiGLU or classic FeedForward)
+        if config.use_swiglu:
+            self.experts = nn.ModuleList([SwiGLU(config) for _ in range(self.num_experts)])
+        else:
+            self.experts = nn.ModuleList([FeedForward(config) for _ in range(self.num_experts)])
+            
+        # Router linear layer to output probabilities for each expert
+        self.router = nn.Linear(config.n_embd, self.num_experts, bias=False)
+        
+    def forward(self, x):
+        B, T, C = x.shape
+        # Flatten x to (B*T, C) so we route per-token
+        x_flat = x.view(-1, C)
+        
+        # 1. Calculate router logits
+        logits = self.router(x_flat) # (B*T, num_experts)
+        
+        # 2. Get top-k routing weights and indices
+        routing_weights, selected_experts = torch.topk(F.softmax(logits, dim=-1), self.top_k, dim=-1)
+        
+        # 3. Normalize routing weights so they sum to 1
+        routing_weights = routing_weights / routing_weights.sum(dim=-1, keepdim=True)
+        
+        # 4. Initialize output tensor
+        final_output = torch.zeros_like(x_flat)
+        
+        # 5. Process each expert
+        # We loop over all experts, find the tokens assigned to them, and process them
+        for i, expert in enumerate(self.experts):
+            # Find which tokens chose expert i (returns a boolean mask of shape (B*T, top_k))
+            expert_mask = (selected_experts == i)
+            
+            # Find the indices of the tokens in the sequence (0 to B*T)
+            token_indices = torch.nonzero(expert_mask.any(dim=-1), as_tuple=True)[0]
+            
+            if token_indices.numel() > 0:
+                # Extract the actual tokens for this expert
+                expert_inputs = x_flat[token_indices]
+                
+                # Pass through the expert
+                expert_outputs = expert(expert_inputs)
+                
+                # We need to extract the routing weights for these specific tokens for this specific expert
+                # expert_mask is (B*T, top_k). We want the weights where expert_mask is True.
+                idx_in_topk = expert_mask[token_indices].nonzero(as_tuple=True)[1]
+                weights = routing_weights[token_indices, idx_in_topk].unsqueeze(-1) # (num_assigned_tokens, 1)
+                
+                # Add to final output
+                final_output[token_indices] += expert_outputs * weights
+                
+        # Unflatten back to original shape
+        return final_output.view(B, T, C)
+
 class Block(nn.Module):
     """ Transformer block: communication (attention) followed by computation (feed-forward) """
     def __init__(self, config):
         super().__init__()
         self.sa = MultiHeadAttention(config)
         
-        # Route to SwiGLU if flag is set, else fallback to classic FeedForward
-        if config.use_swiglu:
+        # Route to MoE, SwiGLU, or classic FeedForward based on flags
+        if config.use_moe:
+            self.ffwd = SparseMoE(config)
+        elif config.use_swiglu:
             self.ffwd = SwiGLU(config)
         else:
             self.ffwd = FeedForward(config)
@@ -418,4 +485,6 @@ class GPT(nn.Module):
             idx_next = torch.multinomial(probs, num_samples=1) # (B, 1)
             # append sampled index to the running sequence
             idx = torch.cat((idx, idx_next), dim=1) # (B, T+1)
+            if idx_next.item() == 50256:
+                break
         return idx

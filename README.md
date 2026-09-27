@@ -78,8 +78,12 @@ graph TD
     
     RMS2 --> FFN[Classic FeedForward MLP]:::removed
     RMS2 -.->|Optional Upgrade| SwiGLU[SwiGLU Network]:::upgrade
+    RMS2 -.->|Optional Upgrade| MoE[SparseMoE Router]:::upgrade
+    
+    MoE --> Experts[Top-K Experts: SwiGLU or FFN]:::upgrade
     
     SwiGLU --> Res2((+))
+    Experts --> Res2
     Res1 --> Res2
 ```
 
@@ -107,10 +111,11 @@ graph TD
 ```
 
 #### The Upgrades Breakdown:
-1. **[Flash Attention](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L126):** Modifies `MultiHeadAttention` to bypass the slow, explicit `Head` loops and compute attention matrices in ultra-fast, SRAM-aware chunks.
-2. **[SwiGLU](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L202-L215):** Replaced the classic `FeedForward` MLP inside `Block`. It uses a dual-pathway gating mechanism with a Swish activation, giving the model an internal "if/else" mechanism that massively improves arithmetic and conditional reasoning.
-3. **[RMSNorm](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L228-L242):** Conditionally swaps `nn.LayerNorm` inside `Block` and `GPT`. By dropping the computationally expensive mean-centering step, it speeds up the network without sacrificing stability.
-4. **[RoPE (Rotary Position Embeddings)](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py#L47-L53):** We conditionally bypass the `position_embedding_table` at the start of `GPT`. Instead, positional information is mathematically injected directly into the Query and Key vectors inside `Head` and `MultiHeadAttention`. Because the Attention block uses a dot product (measuring angles), this rotation perfectly encodes the *relative* distance between tokens, no matter how deep the network gets.
+1. **[Flash Attention](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py):** Modifies `MultiHeadAttention` to bypass the slow, explicit `Head` loops and compute attention matrices in ultra-fast, SRAM-aware chunks.
+2. **[SwiGLU](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py):** Replaced the classic `FeedForward` MLP inside `Block`. It uses a dual-pathway gating mechanism with a Swish activation, giving the model an internal "if/else" mechanism that massively improves arithmetic and conditional reasoning.
+3. **[RMSNorm](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py):** Conditionally swaps `nn.LayerNorm` inside `Block` and `GPT`. By dropping the computationally expensive mean-centering step, it speeds up the network without sacrificing stability.
+4. **[RoPE (Rotary Position Embeddings)](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py):** We conditionally bypass the `position_embedding_table` at the start of `GPT`. Instead, positional information is mathematically injected directly into the Query and Key vectors inside `Head` and `MultiHeadAttention`. Because the Attention block uses a dot product (measuring angles), this rotation perfectly encodes the *relative* distance between tokens, no matter how deep the network gets.
+5. **[SparseMoE (Mixture of Experts)](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py):** Conditionally replaces the single FeedForward or SwiGLU network with a dynamic routing layer. It creates N experts (which can themselves be SwiGLU networks) and selectively routes each token to the best K experts, massively expanding model capacity without increasing compute time per token.
 
 ## Mathematical Reasoning & Chain-of-Thought
 

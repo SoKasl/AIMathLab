@@ -19,6 +19,8 @@ experiment_results.csv
 *_samples_*.txt
 test_run.csv
 
+# Research Drafts
+paper_draft*.md
+
 # macOS
 .DS_Store
-

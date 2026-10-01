@@ -13,6 +13,9 @@ __pycache__/
 # Generated Data
 math_train*
 math_eval*
+math_stage*
+math_hierarchical*
+scratch/
 
 # Experiment Results
 experiment_results.csv
@@ -21,6 +24,8 @@ test_run.csv
 
 # Research Drafts
 paper_draft*.md
+paper_latex/
+paper/
 
 # macOS
 .DS_Store

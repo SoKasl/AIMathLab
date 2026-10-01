@@ -140,11 +140,18 @@ class SyntheticMathDataset(Dataset):
     def __getitem__(self, idx):
         return self.samples[idx]
 
-def get_dataloaders(batch_size=4, block_size=256, use_old_data=False, use_curriculum_data=False):
+def get_dataloaders(batch_size=4, block_size=256, use_old_data=False, use_curriculum_data=False, use_hierarchical_data=False):
     """ Helper function to easily get our dataloaders in the training script """
     wiki_dataset = WikiTextDataset(split='train', block_size=block_size)
     
-    if use_old_data:
+    shuffle_math = True
+    if use_hierarchical_data:
+        train_file = "math_hierarchical_curriculum_train.txt"
+        eval_file = "math_eval_hierarchical.txt"
+        # In hierarchical curriculum, preserve sequential order so the model learns
+        # Stage 1 (Add/Sub) -> Stage 2 (1-digit Mul) -> Stage 3 (Multi-digit FOIL) -> Stage 4 (Division)
+        shuffle_math = False
+    elif use_old_data:
         train_file = "math_train_old.txt"
         eval_file = "math_eval_old.txt"
     elif use_curriculum_data:
@@ -160,7 +167,7 @@ def get_dataloaders(batch_size=4, block_size=256, use_old_data=False, use_curric
     
     # DataLoader handles batching (grabbing 4 sequences at a time) and shuffling
     wiki_loader = DataLoader(wiki_dataset, batch_size=batch_size, shuffle=True)
-    math_train_loader = DataLoader(math_train_dataset, batch_size=batch_size, shuffle=True)
+    math_train_loader = DataLoader(math_train_dataset, batch_size=batch_size, shuffle=shuffle_math)
     math_eval_loader = DataLoader(math_eval_dataset, batch_size=batch_size, shuffle=True)
     
     return wiki_loader, math_train_loader, math_eval_loader

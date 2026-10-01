@@ -33,7 +33,7 @@ def parse_equation_block(block):
         
     return prompt, expected, op
 
-def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False, sample_log_path=None):
+def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False, use_hierarchical_data=False, sample_log_path=None, eval_file=None):
     if sample_log_path and os.path.exists(sample_log_path):
         os.remove(sample_log_path) # Clear previous log for this step
         
@@ -56,7 +56,14 @@ def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False, 
         # Running as part of an experiment loop
         model.eval()
     
-    eval_file = 'math_eval_100_old.txt' if use_old_data else 'math_eval_100.txt'
+    if eval_file is None:
+        if use_hierarchical_data:
+            eval_file = 'math_eval_hierarchical.txt'
+        elif use_old_data:
+            eval_file = 'math_eval_100_old.txt'
+        else:
+            eval_file = 'math_eval_100.txt'
+            
     with open(eval_file, 'r', encoding='utf-8') as f:
         content = f.read().split('\n\n')
         
@@ -138,4 +145,10 @@ def evaluate_model(model=None, tokenizer=None, device=None, use_old_data=False, 
     return accuracies
 
 if __name__ == '__main__':
-    evaluate_model()
+    import argparse
+    parser = argparse.ArgumentParser(description="Evaluate trained GPT math model")
+    parser.add_argument("--use_old_data", action="store_true", help="Use old non-CoT eval set")
+    parser.add_argument("--use_hierarchical_data", action="store_true", help="Use hierarchical curriculum eval set")
+    parser.add_argument("--eval_file", type=str, default=None, help="Explicit eval file path")
+    args = parser.parse_args()
+    evaluate_model(use_old_data=args.use_old_data, use_hierarchical_data=args.use_hierarchical_data, eval_file=args.eval_file)

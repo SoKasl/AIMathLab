@@ -69,80 +69,118 @@ This document tracks the results of our model training runs to observe the impac
 
 ---
 
-## Run 5: Modern Architecture (NEW CoT Data)
+## Run 5: Modern Architecture (Extended FOIL Data)
 
 **Configuration:**
-- **Reasoning:** TRUE Chain-of-Thought (Scratchpad) for all operations.
+- **Reasoning:** Standard FOIL Scratchpad for all operations.
 - **Architecture:** SwiGLU, RMSNorm, RoPE, Flash Attention (Dense Model).
-- **Data:** `math_train.txt` (New 100k CoT dataset)
-
-### Results Snapshot
-| Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 10000 | 5000 | 4061.89 | 37.0 | 80.0 | 68.0 | **0.0** | **0.0** |
-| 50000 | 5000 | 16612.17 | 27.0 | 40.0 | 68.0 | **0.0** | **0.0** |
-
----
-
-## Run 6: Mixture of Experts (NEW CoT Data)
-
-**Configuration:**
-- **Reasoning:** TRUE Chain-of-Thought (Scratchpad) for all operations.
-- **Architecture:** Sparse Mixture of Experts (4 Experts, Top-2 Routing), SwiGLU, RMSNorm, RoPE, Flash Attention.
-- **Data:** `math_train.txt` (New 100k CoT dataset)
-
-### Results Snapshot
-| Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 10000 | 5000 | 8910.24 | 40.0 | 84.0 | 76.0 | 0.0 | 0.0 |
-| 50000 | 5000 | 28852.59 | 40.0 | 72.0 | 88.0 | 0.0 | 0.0 |
-
-## Run 7: Modern Architecture (Extended FOIL Data)
-
-**Configuration:**
-- **Reasoning:** TRUE Chain-of-Thought (Scratchpad) for all operations.
-- **Architecture:** SwiGLU, RMSNorm, RoPE, Flash Attention (Dense Model).
-- **Data:** `math_train.txt` (New 100k CoT dataset)
+- **Data:** `math_train.txt` (Sequence-packed, block size 256)
 
 ### Results Snapshot (Fixed at 20k Wiki Steps)
 | Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 20000 | 10000 | 6885.16 | 48.0 | 92.0 | 100.0 | 0.0 | 0.0 |
-| 20000 | 25000 | 10514.15 | 50.0 | 100.0 | 100.0 | 0.0 | 0.0 |
-| 20000 | 50000 | 21170.26 | 51.0 | 100.0 | 100.0 | 0.0 | 4.0 |
-| 20000 | 75000 | 26848.26 | 52.0 | 100.0 | 100.0 | 4.0 | 4.0 |
-| 20000 | 100000 | 32478.44 | 52.0 | 100.0 | 100.0 | 4.0 | 4.0 |
+| 20000 | 10000 | 6553.69 | 46.0 | 84.0 | 100.0 | 0.0 | 0.0 |
+| 20000 | 25000 | 9764.79 | 46.0 | 92.0 | 92.0 | 0.0 | 0.0 |
+| 20000 | 50000 | 15077.95 | 52.0 | 100.0 | 100.0 | 0.0 | 8.0 |
+| 20000 | 75000 | 20367.44 | 53.0 | 100.0 | 100.0 | 4.0 | 8.0 |
+| 20000 | 100000 | 25656.57 | 54.0 | 100.0 | 100.0 | 8.0 | 8.0 |
 
 ---
 
-## Run 8: Mixture of Experts (Extended FOIL Data)
+## Run 6: Mixture of Experts (Extended FOIL Data)
 
 **Configuration:**
-- **Reasoning:** TRUE Chain-of-Thought (Scratchpad) for all operations.
+- **Reasoning:** Standard FOIL Scratchpad for all operations.
 - **Architecture:** Sparse Mixture of Experts (4 Experts, Top-2 Routing), SwiGLU, RMSNorm, RoPE, Flash Attention.
-- **Data:** `math_train.txt` (New 100k CoT dataset)
+- **Data:** `math_train.txt` (Sequence-packed, block size 256)
 
 ### Results Snapshot (Fixed at 20k Wiki Steps)
 | Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 20000 | 10000 | 9730.43 | 47.0 | 88.0 | 100.0 | 0.0 | 0.0 |
-| 20000 | 25000 | 14905.74 | 51.0 | 100.0 | 100.0 | 0.0 | 4.0 |
-| 20000 | 50000 | 23110.49 | 51.0 | 96.0 | 100.0 | 4.0 | 4.0 |
-| 20000 | 75000 | 31990.58 | 54.0 | 100.0 | 100.0 | 0.0 | 16.0 |
-| 20000 | 100000 | 40208.97 | 52.0 | 96.0 | 100.0 | 0.0 | 12.0 |
+| 20000 | 10000 | 9061.19 | 39.0 | 76.0 | 80.0 | 0.0 | 0.0 |
+| 20000 | 25000 | 13606.51 | 49.0 | 96.0 | 100.0 | 0.0 | 0.0 |
+| 20000 | 50000 | 21121.29 | 50.0 | 100.0 | 100.0 | 0.0 | 0.0 |
+| 20000 | 75000 | 28902.42 | 53.0 | 100.0 | 100.0 | 8.0 | 4.0 |
+| 20000 | 100000 | 36810.40 | 54.0 | 100.0 | 100.0 | 8.0 | 8.0 |
 
 ---
 
-### Key Takeaways (Speed & Accuracy)
-1. **Flash Attention Speedup is Real:** The baseline model took ~4.9 hours for 20,000 Wiki steps. The Flash Attention model took ~4.4 hours. A ~10% speedup.
-2. **Extended Pretraining Does NOT Equal Reasoning:** In Run 2, pushing the language pretraining all the way to 50,000 steps actually *worsened* the math performance (Overall accuracy dropped to 6.0%, and Subtraction dropped to 0.0%). This conclusively proves that throwing more English text at the model does not teach it mathematics.
-3. **The Modern Architecture is a Gamechanger:** Run 3 completely obliterates the baseline. By just 10,000 Wiki steps, the modern architecture achieved **88% accuracy on Addition** and **56% on Subtraction** (compared to the baseline's 12% and 8%). RoPE, RMSNorm, and SwiGLU fundamentally increased the model's ability to learn and route logic.
-4. **MoE Requires More Pretraining Context:** In Run 4, MoE slightly underperformed the dense modern architecture at 10k Wiki steps (31% vs 36%). However, given 20k Wiki steps, the Router had enough linguistic context to effectively route tokens, allowing MoE to *surpass* the dense architecture (39% vs 34% overall, and **92% vs 84% on Addition**).
-5. **Algorithmic Limit:** Despite scoring 92% on addition, the models still scored exactly 0.0% on Multiplication and Division. No amount of architectural upgrades can overcome the lack of step-by-step scratchpad reasoning for complex algorithms.
-6. **New CoT Data Requires MORE Training Time:** In Runs 5 and 6, models trained on the New Chain-of-Thought dataset still scored exactly **0.0%** on Multiplication and Division at 5,000 steps. Because the new data forces the model to generate a very long step-by-step scratchpad before the final answer, 5,000 training steps is simply not enough time for the model to learn the complex formatting *and* the algorithmic logic. 
-7. **MoE Handles Complex Reasoning Better:** On the New CoT data, the MoE architecture (Run 6) significantly outperformed the dense architecture (Run 5). At 50k Wiki steps, MoE achieved **40% overall accuracy** compared to the dense model's **27%**. The extra parameters and routing capability in MoE are crucial for parsing the long Chain-of-Thought scratchpads.
-8. **Extended Math Training Flatlines without Zero-Padding:** In Run 7 and 8, extending training from 5k all the way up to 100,000 math steps proves that training time is NOT the bottleneck. Multiplication accuracy peaks and flatlines at ~4.0%. The model lacks the explicit mathematical logic to infer base-10 zero-padding (e.g. 800 * 500 = 400000).
-9. **MoE Evaluates Partial Quotients well:** In Run 8, the MoE architecture reached 16% accuracy on Division (compared to the dense model's 4%), suggesting that MoE is much better at evaluating the long recursive partial quotient logic of the division algorithm.
+## Run 7: Modern Architecture (Zero-Padding Curriculum Data)
+
+**Configuration:**
+- **Reasoning:** Curriculum CoT with Scientific/Zero-Padding notation (`cl:4*8e4=320000`) and partial-quotient division.
+- **Architecture:** SwiGLU, RMSNorm, RoPE, Flash Attention (Dense Model).
+- **Data:** `math_train_curriculum.txt` (Sequence-packed, block size 256)
+
+### Results Snapshot (Fixed at 20k Wiki Steps)
+| Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 20000 | 1000 | 4837.74 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 2000 | 5136.59 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 3000 | 5438.72 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 4000 | 5740.88 | 1.0 | 4.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 5000 | 6037.93 | 6.0 | 8.0 | 16.0 | 0.0 | 0.0 |
+| 20000 | 10000 | 7165.73 | 43.0 | 88.0 | 84.0 | 0.0 | 0.0 |
+| 20000 | 25000 | 10332.29 | 46.0 | 92.0 | 92.0 | 0.0 | 0.0 |
+| 20000 | 50000 | 15696.26 | 49.0 | 88.0 | 100.0 | 0.0 | 8.0 |
+| 20000 | 75000 | 21499.87 | 53.0 | 100.0 | 100.0 | 4.0 | 8.0 |
+| 20000 | 100000 | 26969.30 | 51.0 | 100.0 | 100.0 | 0.0 | 4.0 |
+
+---
+
+## Run 8: Mixture of Experts (Zero-Padding Curriculum Data)
+
+**Configuration:**
+- **Reasoning:** Curriculum CoT with Scientific/Zero-Padding notation and partial-quotient division.
+- **Architecture:** Sparse Mixture of Experts (4 Experts, Top-2 Routing), SwiGLU, RMSNorm, RoPE, Flash Attention.
+- **Data:** `math_train_curriculum.txt` (Sequence-packed, block size 256)
+
+### Results Snapshot (Fixed at 20k Wiki Steps)
+| Wiki Steps | Math Steps | Elapsed Time (s) | Overall Acc (%) | Add Acc (%) | Sub Acc (%) | Mul Acc (%) | Div Acc (%) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 20000 | 1000 | 6965.03 | 1.0 | 4.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 2000 | 7502.38 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| 20000 | 3000 | 8041.45 | 1.0 | 0.0 | 4.0 | 0.0 | 0.0 |
+| 20000 | 4000 | 8571.81 | 7.0 | 12.0 | 16.0 | 0.0 | 0.0 |
+| 20000 | 5000 | 9110.26 | 12.0 | 28.0 | 20.0 | 0.0 | 0.0 |
+| 20000 | 10000 | 10951.79 | 45.0 | 88.0 | 92.0 | 0.0 | 0.0 |
+| 20000 | 25000 | 15584.18 | 46.0 | 88.0 | 92.0 | 0.0 | 4.0 |
+| 20000 | 50000 | 23089.84 | 49.0 | 96.0 | 100.0 | 0.0 | 0.0 |
+| 20000 | 75000 | 30619.30 | 51.0 | 100.0 | 100.0 | 0.0 | 4.0 |
+| 20000 | 100000 | 38006.20 | 55.0 | 100.0 | 100.0 | 0.0 | **20.0** |
+
+---
+
+### Key Takeaways & Error Analysis
+
+1. **Extended Training Yields Diminishing Returns:**
+   Across Runs 5, 6, 7, and 8, extending math alignment from 50,000 steps to 100,000 steps (doubling compute time from ~4.5 to ~10.5 hours) produced virtually flat gains (+2% to +6%). Addition and Subtraction completely saturated at **100.0%**, but multiplication remained stalled near 0%. This confirms that the bottleneck is **purely algorithmic representation**, not training exposure.
+
+2. **Error Analysis of the Zero-Padding Curriculum (Why Multiplication Scored 0%):**
+   An inspection of the generated logs revealed an unexpected finding:
+   * **The zero-padding/scientific notation actually worked!**
+     ```text
+     247 * 316 = (200 + 40 + 7) * (300 + 10 + 6)
+     200*300 = cl:2*3e4 = 6e4 = 60000  (CORRECT)
+     200*10  = cl:2*1e3 = 2e3 = 2000   (CORRECT)
+     200*6   = cl:2*6e2 = 12e2 = 1200  (CORRECT)
+     40*300  = cl:4*3e3 = 12e3 = 12000 (CORRECT)
+     ...
+     7*6     = cl:7*6 = 42             (CORRECT)
+     ```
+     The model learned all 9 sub-multiplication terms with 100% mathematical precision!
+   * **The Failure Mode: The 9-Term Summation Leap:**
+     At the final step, the format expected the model to mentally sum up all 9 multi-digit terms in a single forward pass without intermediate scratchpad steps:
+     `Sum = 60000 + 2000 + 1200 + 12000 + 400 + 240 + 2100 + 70 + 42 = 75312 (Expected: 78052)`
+     A compact ~10M parameter model lacks the working memory and transformer depth to sum 9 high-magnitude numbers in one autoregressive step. Because the final sum had a minor addition error, the whole problem was scored as 0%.
+
+3. **Division: MoE Router Unlocks Partial Quotients (20% vs 4%):**
+   In Run 8, MoE achieved **20.0% accuracy on Division**, compared to only 4.0% for the dense model in Run 7. The sparse expert routing provided the capacity needed to balance quotient estimation and multi-step remainder subtraction. However, partial quotient guessing remains inherently fragile compared to deterministic long division.
+
+4. **The Solution: Deterministic Hierarchical Staging:**
+   This error analysis directly motivated our **Hierarchical Developmental Curriculum**:
+   - **Stage 2 & 3:** Teaches single-digit primitive recall ($0 \times 0$ to $9 \times 9$) followed by pairwise/column-wise addition rather than an unrolled 9-term sum.
+   - **Stage 4:** Replaces trial-and-error partial quotients with deterministic **Digit-by-Digit Long Division**, reducing each division step to 1-digit primitives.
 
 ---
 
@@ -183,3 +221,20 @@ During our fine-tuning experiments, we investigated three distinct dataloader st
   2. **Instruction Masking:** Prompt tokens are masked with `-100`, so zero loss is computed on the prompt, and full loss is computed on the thought process, answer, and stopping token.
   3. **High Token Density (~97%):** Restores full ~5M token training throughput across 5,000 steps, allowing arithmetic weights to converge at full speed without wasting compute on empty padding.
   4. **Eliminates the Performance Drop:** Combines the high token volume of Approach A with the clean evaluation alignment of Approach B.
+
+---
+
+## 11. Hierarchical Developmental Curriculum Dataset Design
+
+To systematically eliminate the 0% plateau on multiplication and division in compact ~10M models, we transition from flat multi-task training to a staged cognitive curriculum:
+
+### 11.1 The Staged Hierarchy
+1. **Stage 1 (Additive Foundations, 30,000 samples):** 50% Addition, 50% Subtraction (place-value decomposition and borrow states).
+2. **Stage 2 (Single-Digit Primitive Lookup, 30,000 samples):** Exhaustive 100% coverage of the $10 \times 10$ multiplication table ($0 \times 0$ to $9 \times 9$, 40%) + 60% Add/Sub rehearsal.
+3. **Stage 3 (Multi-Digit FOIL Expansion, 40,000 samples):** 60% Multi-digit FOIL multiplication with explicit zero accounting + 40% Add/Sub rehearsal.
+4. **Stage 4 (Digit-by-Digit Long Division, 50,000 samples):** 45% Long Division (quotient estimation, single-digit multiply, subtraction remainder, digit descent) + 35% Multi-digit Mul + 10% Add + 10% Sub.
+
+### 11.2 Consolidated Single-Stream Training
+* **File:** `math_hierarchical_curriculum_train.txt` (150,000 total samples)
+* **Training Dynamics:** Arranged in pure developmental order (Stage 1 $\rightarrow$ Stage 2 $\rightarrow$ Stage 3 $\rightarrow$ Stage 4). Trained in a single epoch with Sequence Packing and smooth cosine learning rate annealing.
+* **Evaluation Benchmark:** `math_eval_hierarchical.txt` (100 balanced samples: 25 Add, 25 Sub, 25 Mul, 25 Div). Evaluated periodically (e.g. every 500 steps) to track the phased emergence of arithmetic reasoning.

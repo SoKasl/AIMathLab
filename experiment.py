@@ -58,7 +58,8 @@ def run_experiment(args):
             batch_size=4, 
             block_size=b_size, 
             use_old_data=args.use_old_math_data, 
-            use_curriculum_data=args.use_curriculum_data
+            use_curriculum_data=args.use_curriculum_data,
+            use_hierarchical_data=args.use_hierarchical_data
         )
         
         # 3. Pretrain on WikiText
@@ -116,7 +117,7 @@ def run_experiment(args):
             print(f"\nEvaluating Math at step {current_math_step} for {wiki_step} Wiki steps...")
             
             sample_log_path = csv_file.replace(".csv", f"_samples_wiki{wiki_step}_math{current_math_step}.txt")
-            accs = evaluate_model(model, tokenizer, device, use_old_data=args.use_old_math_data, sample_log_path=sample_log_path)
+            accs = evaluate_model(model, tokenizer, device, use_old_data=args.use_old_math_data, use_hierarchical_data=args.use_hierarchical_data, sample_log_path=sample_log_path)
             
             elapsed = time.time() - start_time
             with open(csv_file, 'a', newline='') as f:
@@ -147,6 +148,7 @@ if __name__ == "__main__":
     parser.add_argument("--csv_output", type=str, default="experiment_results.csv", help="Output CSV filename")
     parser.add_argument("--use_old_math_data", action="store_true", help="Use the old non-CoT math datasets")
     parser.add_argument("--use_curriculum_data", action="store_true", help="Use the new curriculum math datasets")
+    parser.add_argument("--use_hierarchical_data", action="store_true", help="Use the 4-stage hierarchical developmental curriculum math dataset")
     parser.add_argument("--use_kv_cache", action="store_true", help="Use KV cache during inference/evaluation")
     parser.add_argument("--wiki_intervals", nargs="+", type=int, default=[100, 5000, 10000, 20000], help="List of Wiki steps")
     parser.add_argument("--math_eval_points", nargs="+", type=int, default=[0, 1000, 2000, 3000, 4000, 5000], help="List of Math eval points")

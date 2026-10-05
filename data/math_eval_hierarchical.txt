@@ -1,0 +1,300 @@
+Q: What is 709 + 776?
+A: <thought> 709 + 776 = 700 + 700 + 0 + 70 + 9 + 6 = 1400 + 70 + 15 = 1485 </thought> 1485
+
+Q: What is 185 + 300?
+A: <thought> 185 + 300 = 100 + 300 + 80 + 0 + 5 + 0 = 400 + 80 + 5 = 485 </thought> 485
+
+Q: What is 271 + 815?
+A: <thought> 271 + 815 = 200 + 800 + 70 + 10 + 1 + 5 = 1000 + 80 + 6 = 1086 </thought> 1086
+
+Q: What is 601 + 596?
+A: <thought> 601 + 596 = 600 + 500 + 0 + 90 + 1 + 6 = 1100 + 90 + 7 = 1197 </thought> 1197
+
+Q: What is 513 + 388?
+A: <thought> 513 + 388 = 500 + 300 + 10 + 80 + 3 + 8 = 800 + 90 + 11 = 901 </thought> 901
+
+Q: What is 476 + 860?
+A: <thought> 476 + 860 = 400 + 800 + 70 + 60 + 6 + 0 = 1200 + 130 + 6 = 1336 </thought> 1336
+
+Q: What is 349 + 418?
+A: <thought> 349 + 418 = 300 + 400 + 40 + 10 + 9 + 8 = 700 + 50 + 17 = 767 </thought> 767
+
+Q: What is 437 + 658?
+A: <thought> 437 + 658 = 400 + 600 + 30 + 50 + 7 + 8 = 1000 + 80 + 15 = 1095 </thought> 1095
+
+Q: What is 538 + 310?
+A: <thought> 538 + 310 = 500 + 300 + 30 + 10 + 8 + 0 = 800 + 40 + 8 = 848 </thought> 848
+
+Q: What is 566 + 728?
+A: <thought> 566 + 728 = 500 + 700 + 60 + 20 + 6 + 8 = 1200 + 80 + 14 = 1294 </thought> 1294
+
+Q: What is 179 + 145?
+A: <thought> 179 + 145 = 100 + 100 + 70 + 40 + 9 + 5 = 200 + 110 + 14 = 324 </thought> 324
+
+Q: What is 912 + 846?
+A: <thought> 912 + 846 = 900 + 800 + 10 + 40 + 2 + 6 = 1700 + 50 + 8 = 1758 </thought> 1758
+
+Q: What is 325 + 926?
+A: <thought> 325 + 926 = 300 + 900 + 20 + 20 + 5 + 6 = 1200 + 40 + 11 = 1251 </thought> 1251
+
+Q: What is 178 + 625?
+A: <thought> 178 + 625 = 100 + 600 + 70 + 20 + 8 + 5 = 700 + 90 + 13 = 803 </thought> 803
+
+Q: What is 568 + 939?
+A: <thought> 568 + 939 = 500 + 900 + 60 + 30 + 8 + 9 = 1400 + 90 + 17 = 1507 </thought> 1507
+
+Q: What is 919 + 900?
+A: <thought> 919 + 900 = 900 + 900 + 10 + 0 + 9 + 0 = 1800 + 10 + 9 = 1819 </thought> 1819
+
+Q: What is 558 + 574?
+A: <thought> 558 + 574 = 500 + 500 + 50 + 70 + 8 + 4 = 1000 + 120 + 12 = 1132 </thought> 1132
+
+Q: What is 899 + 455?
+A: <thought> 899 + 455 = 800 + 400 + 90 + 50 + 9 + 5 = 1200 + 140 + 14 = 1354 </thought> 1354
+
+Q: What is 138 + 863?
+A: <thought> 138 + 863 = 100 + 800 + 30 + 60 + 8 + 3 = 900 + 90 + 11 = 1001 </thought> 1001
+
+Q: What is 207 + 192?
+A: <thought> 207 + 192 = 200 + 100 + 0 + 90 + 7 + 2 = 300 + 90 + 9 = 399 </thought> 399
+
+Q: What is 571 + 296?
+A: <thought> 571 + 296 = 500 + 200 + 70 + 90 + 1 + 6 = 700 + 160 + 7 = 867 </thought> 867
+
+Q: What is 871 + 186?
+A: <thought> 871 + 186 = 800 + 100 + 70 + 80 + 1 + 6 = 900 + 150 + 7 = 1057 </thought> 1057
+
+Q: What is 242 + 455?
+A: <thought> 242 + 455 = 200 + 400 + 40 + 50 + 2 + 5 = 600 + 90 + 7 = 697 </thought> 697
+
+Q: What is 402 + 728?
+A: <thought> 402 + 728 = 400 + 700 + 0 + 20 + 2 + 8 = 1100 + 20 + 10 = 1130 </thought> 1130
+
+Q: What is 579 + 434?
+A: <thought> 579 + 434 = 500 + 400 + 70 + 30 + 9 + 4 = 900 + 100 + 13 = 1013 </thought> 1013
+
+Q: What is 581 - 277?
+A: <thought> 1 ones - 7 ones (borrow 10) -> 11 - 7 = 4. 7 tens - 7 tens -> 70 - 70 = 0. 5 hundreds - 2 hundreds -> 500 - 200 = 300. Answer = 300 + 0 + 4 = 304 </thought> 304
+
+Q: What is 449 - 164?
+A: <thought> 9 ones - 4 ones -> 9 - 4 = 5. 4 tens - 6 tens (borrow 100) -> 140 - 60 = 80. 3 hundreds - 1 hundreds -> 300 - 100 = 200. Answer = 200 + 80 + 5 = 285 </thought> 285
+
+Q: What is 773 - 184?
+A: <thought> 3 ones - 4 ones (borrow 10) -> 13 - 4 = 9. 6 tens - 8 tens (borrow 100) -> 160 - 80 = 80. 6 hundreds - 1 hundreds -> 600 - 100 = 500. Answer = 500 + 80 + 9 = 589 </thought> 589
+
+Q: What is 632 - 369?
+A: <thought> 2 ones - 9 ones (borrow 10) -> 12 - 9 = 3. 2 tens - 6 tens (borrow 100) -> 120 - 60 = 60. 5 hundreds - 3 hundreds -> 500 - 300 = 200. Answer = 200 + 60 + 3 = 263 </thought> 263
+
+Q: What is 852 - 328?
+A: <thought> 2 ones - 8 ones (borrow 10) -> 12 - 8 = 4. 4 tens - 2 tens -> 40 - 20 = 20. 8 hundreds - 3 hundreds -> 800 - 300 = 500. Answer = 500 + 20 + 4 = 524 </thought> 524
+
+Q: What is 268 - 113?
+A: <thought> 8 ones - 3 ones -> 8 - 3 = 5. 6 tens - 1 tens -> 60 - 10 = 50. 2 hundreds - 1 hundreds -> 200 - 100 = 100. Answer = 100 + 50 + 5 = 155 </thought> 155
+
+Q: What is 871 - 650?
+A: <thought> 1 ones - 0 ones -> 1 - 0 = 1. 7 tens - 5 tens -> 70 - 50 = 20. 8 hundreds - 6 hundreds -> 800 - 600 = 200. Answer = 200 + 20 + 1 = 221 </thought> 221
+
+Q: What is 376 - 276?
+A: <thought> 6 ones - 6 ones -> 6 - 6 = 0. 7 tens - 7 tens -> 70 - 70 = 0. 3 hundreds - 2 hundreds -> 300 - 200 = 100. Answer = 100 + 0 + 0 = 100 </thought> 100
+
+Q: What is 180 - 178?
+A: <thought> 0 ones - 8 ones (borrow 10) -> 10 - 8 = 2. 7 tens - 7 tens -> 70 - 70 = 0. 1 hundreds - 1 hundreds -> 100 - 100 = 0. Answer = 0 + 0 + 2 = 2 </thought> 2
+
+Q: What is 602 - 287?
+A: <thought> 2 ones - 7 ones (borrow 10) -> 12 - 7 = 5. -1 tens - 8 tens (borrow 100) -> 90 - 80 = 10. 5 hundreds - 2 hundreds -> 500 - 200 = 300. Answer = 300 + 10 + 5 = 315 </thought> 315
+
+Q: What is 827 - 758?
+A: <thought> 7 ones - 8 ones (borrow 10) -> 17 - 8 = 9. 1 tens - 5 tens (borrow 100) -> 110 - 50 = 60. 7 hundreds - 7 hundreds -> 700 - 700 = 0. Answer = 0 + 60 + 9 = 69 </thought> 69
+
+Q: What is 638 - 101?
+A: <thought> 8 ones - 1 ones -> 8 - 1 = 7. 3 tens - 0 tens -> 30 - 0 = 30. 6 hundreds - 1 hundreds -> 600 - 100 = 500. Answer = 500 + 30 + 7 = 537 </thought> 537
+
+Q: What is 959 - 181?
+A: <thought> 9 ones - 1 ones -> 9 - 1 = 8. 5 tens - 8 tens (borrow 100) -> 150 - 80 = 70. 8 hundreds - 1 hundreds -> 800 - 100 = 700. Answer = 700 + 70 + 8 = 778 </thought> 778
+
+Q: What is 850 - 778?
+A: <thought> 0 ones - 8 ones (borrow 10) -> 10 - 8 = 2. 4 tens - 7 tens (borrow 100) -> 140 - 70 = 70. 7 hundreds - 7 hundreds -> 700 - 700 = 0. Answer = 0 + 70 + 2 = 72 </thought> 72
+
+Q: What is 898 - 865?
+A: <thought> 8 ones - 5 ones -> 8 - 5 = 3. 9 tens - 6 tens -> 90 - 60 = 30. 8 hundreds - 8 hundreds -> 800 - 800 = 0. Answer = 0 + 30 + 3 = 33 </thought> 33
+
+Q: What is 823 - 578?
+A: <thought> 3 ones - 8 ones (borrow 10) -> 13 - 8 = 5. 1 tens - 7 tens (borrow 100) -> 110 - 70 = 40. 7 hundreds - 5 hundreds -> 700 - 500 = 200. Answer = 200 + 40 + 5 = 245 </thought> 245
+
+Q: What is 726 - 236?
+A: <thought> 6 ones - 6 ones -> 6 - 6 = 0. 2 tens - 3 tens (borrow 100) -> 120 - 30 = 90. 6 hundreds - 2 hundreds -> 600 - 200 = 400. Answer = 400 + 90 + 0 = 490 </thought> 490
+
+Q: What is 737 - 667?
+A: <thought> 7 ones - 7 ones -> 7 - 7 = 0. 3 tens - 6 tens (borrow 100) -> 130 - 60 = 70. 6 hundreds - 6 hundreds -> 600 - 600 = 0. Answer = 0 + 70 + 0 = 70 </thought> 70
+
+Q: What is 351 - 311?
+A: <thought> 1 ones - 1 ones -> 1 - 1 = 0. 5 tens - 1 tens -> 50 - 10 = 40. 3 hundreds - 3 hundreds -> 300 - 300 = 0. Answer = 0 + 40 + 0 = 40 </thought> 40
+
+Q: What is 438 - 201?
+A: <thought> 8 ones - 1 ones -> 8 - 1 = 7. 3 tens - 0 tens -> 30 - 0 = 30. 4 hundreds - 2 hundreds -> 400 - 200 = 200. Answer = 200 + 30 + 7 = 237 </thought> 237
+
+Q: What is 354 - 248?
+A: <thought> 4 ones - 8 ones (borrow 10) -> 14 - 8 = 6. 4 tens - 4 tens -> 40 - 40 = 0. 3 hundreds - 2 hundreds -> 300 - 200 = 100. Answer = 100 + 0 + 6 = 106 </thought> 106
+
+Q: What is 447 - 252?
+A: <thought> 7 ones - 2 ones -> 7 - 2 = 5. 4 tens - 5 tens (borrow 100) -> 140 - 50 = 90. 3 hundreds - 2 hundreds -> 300 - 200 = 100. Answer = 100 + 90 + 5 = 195 </thought> 195
+
+Q: What is 391 - 219?
+A: <thought> 1 ones - 9 ones (borrow 10) -> 11 - 9 = 2. 8 tens - 1 tens -> 80 - 10 = 70. 3 hundreds - 2 hundreds -> 300 - 200 = 100. Answer = 100 + 70 + 2 = 172 </thought> 172
+
+Q: What is 380 - 309?
+A: <thought> 0 ones - 9 ones (borrow 10) -> 10 - 9 = 1. 7 tens - 0 tens -> 70 - 0 = 70. 3 hundreds - 3 hundreds -> 300 - 300 = 0. Answer = 0 + 70 + 1 = 71 </thought> 71
+
+Q: What is 742 - 132?
+A: <thought> 2 ones - 2 ones -> 2 - 2 = 0. 4 tens - 3 tens -> 40 - 30 = 10. 7 hundreds - 1 hundreds -> 700 - 100 = 600. Answer = 600 + 10 + 0 = 610 </thought> 610
+
+Q: What is 246 * 929?
+A: <thought> 246 * 929 = (200 + 40 + 6) * (900 + 20 + 9). 200*900: 2*9=18 with 4 zeros -> 180000. 200*20: 2*2=4 with 3 zeros -> 4000. 200*9: 2*9=18 with 2 zeros -> 1800. 40*900: 4*9=36 with 3 zeros -> 36000. 40*20: 4*2=8 with 2 zeros -> 800. 40*9: 4*9=36 with 1 zeros -> 360. 6*900: 6*9=54 with 2 zeros -> 5400. 6*20: 6*2=12 with 1 zeros -> 120. 6*9: 54. Sum: 180000 + 4000 + 1800 + 36000 + 800 + 360 + 5400 + 120 + 54 = 228534. </thought> 228534
+
+Q: What is 465 * 18?
+A: <thought> 465 * 18 = (400 + 60 + 5) * (10 + 8). 400*10: 4*1=4 with 3 zeros -> 4000. 400*8: 4*8=32 with 2 zeros -> 3200. 60*10: 6*1=6 with 2 zeros -> 600. 60*8: 6*8=48 with 1 zeros -> 480. 5*10: 5*1=5 with 1 zeros -> 50. 5*8: 40. Sum: 4000 + 3200 + 600 + 480 + 50 + 40 = 8370. </thought> 8370
+
+Q: What is 363 * 35?
+A: <thought> 363 * 35 = (300 + 60 + 3) * (30 + 5). 300*30: 3*3=9 with 3 zeros -> 9000. 300*5: 3*5=15 with 2 zeros -> 1500. 60*30: 6*3=18 with 2 zeros -> 1800. 60*5: 6*5=30 with 1 zeros -> 300. 3*30: 3*3=9 with 1 zeros -> 90. 3*5: 15. Sum: 9000 + 1500 + 1800 + 300 + 90 + 15 = 12705. </thought> 12705
+
+Q: What is 983 * 43?
+A: <thought> 983 * 43 = (900 + 80 + 3) * (40 + 3). 900*40: 9*4=36 with 3 zeros -> 36000. 900*3: 9*3=27 with 2 zeros -> 2700. 80*40: 8*4=32 with 2 zeros -> 3200. 80*3: 8*3=24 with 1 zeros -> 240. 3*40: 3*4=12 with 1 zeros -> 120. 3*3: 9. Sum: 36000 + 2700 + 3200 + 240 + 120 + 9 = 42269. </thought> 42269
+
+Q: What is 909 * 800?
+A: <thought> 909 * 800 = (900 + 9) * (800). 900*800: 9*8=72 with 4 zeros -> 720000. 9*800: 9*8=72 with 2 zeros -> 7200. Sum: 720000 + 7200 = 727200. </thought> 727200
+
+Q: What is 880 * 285?
+A: <thought> 880 * 285 = (800 + 80) * (200 + 80 + 5). 800*200: 8*2=16 with 4 zeros -> 160000. 800*80: 8*8=64 with 3 zeros -> 64000. 800*5: 8*5=40 with 2 zeros -> 4000. 80*200: 8*2=16 with 3 zeros -> 16000. 80*80: 8*8=64 with 2 zeros -> 6400. 80*5: 8*5=40 with 1 zeros -> 400. Sum: 160000 + 64000 + 4000 + 16000 + 6400 + 400 = 250800. </thought> 250800
+
+Q: What is 736 * 738?
+A: <thought> 736 * 738 = (700 + 30 + 6) * (700 + 30 + 8). 700*700: 7*7=49 with 4 zeros -> 490000. 700*30: 7*3=21 with 3 zeros -> 21000. 700*8: 7*8=56 with 2 zeros -> 5600. 30*700: 3*7=21 with 3 zeros -> 21000. 30*30: 3*3=9 with 2 zeros -> 900. 30*8: 3*8=24 with 1 zeros -> 240. 6*700: 6*7=42 with 2 zeros -> 4200. 6*30: 6*3=18 with 1 zeros -> 180. 6*8: 48. Sum: 490000 + 21000 + 5600 + 21000 + 900 + 240 + 4200 + 180 + 48 = 543168. </thought> 543168
+
+Q: What is 158 * 41?
+A: <thought> 158 * 41 = (100 + 50 + 8) * (40 + 1). 100*40: 1*4=4 with 3 zeros -> 4000. 100*1: 1*1=1 with 2 zeros -> 100. 50*40: 5*4=20 with 2 zeros -> 2000. 50*1: 5*1=5 with 1 zeros -> 50. 8*40: 8*4=32 with 1 zeros -> 320. 8*1: 8. Sum: 4000 + 100 + 2000 + 50 + 320 + 8 = 6478. </thought> 6478
+
+Q: What is 397 * 635?
+A: <thought> 397 * 635 = (300 + 90 + 7) * (600 + 30 + 5). 300*600: 3*6=18 with 4 zeros -> 180000. 300*30: 3*3=9 with 3 zeros -> 9000. 300*5: 3*5=15 with 2 zeros -> 1500. 90*600: 9*6=54 with 3 zeros -> 54000. 90*30: 9*3=27 with 2 zeros -> 2700. 90*5: 9*5=45 with 1 zeros -> 450. 7*600: 7*6=42 with 2 zeros -> 4200. 7*30: 7*3=21 with 1 zeros -> 210. 7*5: 35. Sum: 180000 + 9000 + 1500 + 54000 + 2700 + 450 + 4200 + 210 + 35 = 252095. </thought> 252095
+
+Q: What is 882 * 127?
+A: <thought> 882 * 127 = (800 + 80 + 2) * (100 + 20 + 7). 800*100: 8*1=8 with 4 zeros -> 80000. 800*20: 8*2=16 with 3 zeros -> 16000. 800*7: 8*7=56 with 2 zeros -> 5600. 80*100: 8*1=8 with 3 zeros -> 8000. 80*20: 8*2=16 with 2 zeros -> 1600. 80*7: 8*7=56 with 1 zeros -> 560. 2*100: 2*1=2 with 2 zeros -> 200. 2*20: 2*2=4 with 1 zeros -> 40. 2*7: 14. Sum: 80000 + 16000 + 5600 + 8000 + 1600 + 560 + 200 + 40 + 14 = 112014. </thought> 112014
+
+Q: What is 92 * 236?
+A: <thought> 92 * 236 = (90 + 2) * (200 + 30 + 6). 90*200: 9*2=18 with 3 zeros -> 18000. 90*30: 9*3=27 with 2 zeros -> 2700. 90*6: 9*6=54 with 1 zeros -> 540. 2*200: 2*2=4 with 2 zeros -> 400. 2*30: 2*3=6 with 1 zeros -> 60. 2*6: 12. Sum: 18000 + 2700 + 540 + 400 + 60 + 12 = 21712. </thought> 21712
+
+Q: What is 424 * 343?
+A: <thought> 424 * 343 = (400 + 20 + 4) * (300 + 40 + 3). 400*300: 4*3=12 with 4 zeros -> 120000. 400*40: 4*4=16 with 3 zeros -> 16000. 400*3: 4*3=12 with 2 zeros -> 1200. 20*300: 2*3=6 with 3 zeros -> 6000. 20*40: 2*4=8 with 2 zeros -> 800. 20*3: 2*3=6 with 1 zeros -> 60. 4*300: 4*3=12 with 2 zeros -> 1200. 4*40: 4*4=16 with 1 zeros -> 160. 4*3: 12. Sum: 120000 + 16000 + 1200 + 6000 + 800 + 60 + 1200 + 160 + 12 = 145432. </thought> 145432
+
+Q: What is 376 * 323?
+A: <thought> 376 * 323 = (300 + 70 + 6) * (300 + 20 + 3). 300*300: 3*3=9 with 4 zeros -> 90000. 300*20: 3*2=6 with 3 zeros -> 6000. 300*3: 3*3=9 with 2 zeros -> 900. 70*300: 7*3=21 with 3 zeros -> 21000. 70*20: 7*2=14 with 2 zeros -> 1400. 70*3: 7*3=21 with 1 zeros -> 210. 6*300: 6*3=18 with 2 zeros -> 1800. 6*20: 6*2=12 with 1 zeros -> 120. 6*3: 18. Sum: 90000 + 6000 + 900 + 21000 + 1400 + 210 + 1800 + 120 + 18 = 121448. </thought> 121448
+
+Q: What is 683 * 698?
+A: <thought> 683 * 698 = (600 + 80 + 3) * (600 + 90 + 8). 600*600: 6*6=36 with 4 zeros -> 360000. 600*90: 6*9=54 with 3 zeros -> 54000. 600*8: 6*8=48 with 2 zeros -> 4800. 80*600: 8*6=48 with 3 zeros -> 48000. 80*90: 8*9=72 with 2 zeros -> 7200. 80*8: 8*8=64 with 1 zeros -> 640. 3*600: 3*6=18 with 2 zeros -> 1800. 3*90: 3*9=27 with 1 zeros -> 270. 3*8: 24. Sum: 360000 + 54000 + 4800 + 48000 + 7200 + 640 + 1800 + 270 + 24 = 476734. </thought> 476734
+
+Q: What is 557 * 425?
+A: <thought> 557 * 425 = (500 + 50 + 7) * (400 + 20 + 5). 500*400: 5*4=20 with 4 zeros -> 200000. 500*20: 5*2=10 with 3 zeros -> 10000. 500*5: 5*5=25 with 2 zeros -> 2500. 50*400: 5*4=20 with 3 zeros -> 20000. 50*20: 5*2=10 with 2 zeros -> 1000. 50*5: 5*5=25 with 1 zeros -> 250. 7*400: 7*4=28 with 2 zeros -> 2800. 7*20: 7*2=14 with 1 zeros -> 140. 7*5: 35. Sum: 200000 + 10000 + 2500 + 20000 + 1000 + 250 + 2800 + 140 + 35 = 236725. </thought> 236725
+
+Q: What is 893 * 839?
+A: <thought> 893 * 839 = (800 + 90 + 3) * (800 + 30 + 9). 800*800: 8*8=64 with 4 zeros -> 640000. 800*30: 8*3=24 with 3 zeros -> 24000. 800*9: 8*9=72 with 2 zeros -> 7200. 90*800: 9*8=72 with 3 zeros -> 72000. 90*30: 9*3=27 with 2 zeros -> 2700. 90*9: 9*9=81 with 1 zeros -> 810. 3*800: 3*8=24 with 2 zeros -> 2400. 3*30: 3*3=9 with 1 zeros -> 90. 3*9: 27. Sum: 640000 + 24000 + 7200 + 72000 + 2700 + 810 + 2400 + 90 + 27 = 749227. </thought> 749227
+
+Q: What is 151 * 630?
+A: <thought> 151 * 630 = (100 + 50 + 1) * (600 + 30). 100*600: 1*6=6 with 4 zeros -> 60000. 100*30: 1*3=3 with 3 zeros -> 3000. 50*600: 5*6=30 with 3 zeros -> 30000. 50*30: 5*3=15 with 2 zeros -> 1500. 1*600: 1*6=6 with 2 zeros -> 600. 1*30: 1*3=3 with 1 zeros -> 30. Sum: 60000 + 3000 + 30000 + 1500 + 600 + 30 = 95130. </thought> 95130
+
+Q: What is 972 * 381?
+A: <thought> 972 * 381 = (900 + 70 + 2) * (300 + 80 + 1). 900*300: 9*3=27 with 4 zeros -> 270000. 900*80: 9*8=72 with 3 zeros -> 72000. 900*1: 9*1=9 with 2 zeros -> 900. 70*300: 7*3=21 with 3 zeros -> 21000. 70*80: 7*8=56 with 2 zeros -> 5600. 70*1: 7*1=7 with 1 zeros -> 70. 2*300: 2*3=6 with 2 zeros -> 600. 2*80: 2*8=16 with 1 zeros -> 160. 2*1: 2. Sum: 270000 + 72000 + 900 + 21000 + 5600 + 70 + 600 + 160 + 2 = 370332. </thought> 370332
+
+Q: What is 105 * 184?
+A: <thought> 105 * 184 = (100 + 5) * (100 + 80 + 4). 100*100: 1*1=1 with 4 zeros -> 10000. 100*80: 1*8=8 with 3 zeros -> 8000. 100*4: 1*4=4 with 2 zeros -> 400. 5*100: 5*1=5 with 2 zeros -> 500. 5*80: 5*8=40 with 1 zeros -> 400. 5*4: 20. Sum: 10000 + 8000 + 400 + 500 + 400 + 20 = 19320. </thought> 19320
+
+Q: What is 369 * 828?
+A: <thought> 369 * 828 = (300 + 60 + 9) * (800 + 20 + 8). 300*800: 3*8=24 with 4 zeros -> 240000. 300*20: 3*2=6 with 3 zeros -> 6000. 300*8: 3*8=24 with 2 zeros -> 2400. 60*800: 6*8=48 with 3 zeros -> 48000. 60*20: 6*2=12 with 2 zeros -> 1200. 60*8: 6*8=48 with 1 zeros -> 480. 9*800: 9*8=72 with 2 zeros -> 7200. 9*20: 9*2=18 with 1 zeros -> 180. 9*8: 72. Sum: 240000 + 6000 + 2400 + 48000 + 1200 + 480 + 7200 + 180 + 72 = 305532. </thought> 305532
+
+Q: What is 933 * 274?
+A: <thought> 933 * 274 = (900 + 30 + 3) * (200 + 70 + 4). 900*200: 9*2=18 with 4 zeros -> 180000. 900*70: 9*7=63 with 3 zeros -> 63000. 900*4: 9*4=36 with 2 zeros -> 3600. 30*200: 3*2=6 with 3 zeros -> 6000. 30*70: 3*7=21 with 2 zeros -> 2100. 30*4: 3*4=12 with 1 zeros -> 120. 3*200: 3*2=6 with 2 zeros -> 600. 3*70: 3*7=21 with 1 zeros -> 210. 3*4: 12. Sum: 180000 + 63000 + 3600 + 6000 + 2100 + 120 + 600 + 210 + 12 = 255642. </thought> 255642
+
+Q: What is 634 * 984?
+A: <thought> 634 * 984 = (600 + 30 + 4) * (900 + 80 + 4). 600*900: 6*9=54 with 4 zeros -> 540000. 600*80: 6*8=48 with 3 zeros -> 48000. 600*4: 6*4=24 with 2 zeros -> 2400. 30*900: 3*9=27 with 3 zeros -> 27000. 30*80: 3*8=24 with 2 zeros -> 2400. 30*4: 3*4=12 with 1 zeros -> 120. 4*900: 4*9=36 with 2 zeros -> 3600. 4*80: 4*8=32 with 1 zeros -> 320. 4*4: 16. Sum: 540000 + 48000 + 2400 + 27000 + 2400 + 120 + 3600 + 320 + 16 = 623856. </thought> 623856
+
+Q: What is 269 * 240?
+A: <thought> 269 * 240 = (200 + 60 + 9) * (200 + 40). 200*200: 2*2=4 with 4 zeros -> 40000. 200*40: 2*4=8 with 3 zeros -> 8000. 60*200: 6*2=12 with 3 zeros -> 12000. 60*40: 6*4=24 with 2 zeros -> 2400. 9*200: 9*2=18 with 2 zeros -> 1800. 9*40: 9*4=36 with 1 zeros -> 360. Sum: 40000 + 8000 + 12000 + 2400 + 1800 + 360 = 64560. </thought> 64560
+
+Q: What is 416 * 787?
+A: <thought> 416 * 787 = (400 + 10 + 6) * (700 + 80 + 7). 400*700: 4*7=28 with 4 zeros -> 280000. 400*80: 4*8=32 with 3 zeros -> 32000. 400*7: 4*7=28 with 2 zeros -> 2800. 10*700: 1*7=7 with 3 zeros -> 7000. 10*80: 1*8=8 with 2 zeros -> 800. 10*7: 1*7=7 with 1 zeros -> 70. 6*700: 6*7=42 with 2 zeros -> 4200. 6*80: 6*8=48 with 1 zeros -> 480. 6*7: 42. Sum: 280000 + 32000 + 2800 + 7000 + 800 + 70 + 4200 + 480 + 42 = 327392. </thought> 327392
+
+Q: What is 621 * 278?
+A: <thought> 621 * 278 = (600 + 20 + 1) * (200 + 70 + 8). 600*200: 6*2=12 with 4 zeros -> 120000. 600*70: 6*7=42 with 3 zeros -> 42000. 600*8: 6*8=48 with 2 zeros -> 4800. 20*200: 2*2=4 with 3 zeros -> 4000. 20*70: 2*7=14 with 2 zeros -> 1400. 20*8: 2*8=16 with 1 zeros -> 160. 1*200: 1*2=2 with 2 zeros -> 200. 1*70: 1*7=7 with 1 zeros -> 70. 1*8: 8. Sum: 120000 + 42000 + 4800 + 4000 + 1400 + 160 + 200 + 70 + 8 = 172638. </thought> 172638
+
+Q: What is 3024 / 6?
+A: <thought> Divide 3024 by 6: Take 30: 30 / 6 = 5 (6 * 5 = 30), rem = 30 - 30 = 0. Bring down 2 -> 2: 2 / 6 = 0 (6 * 0 = 0), rem = 2 - 0 = 2. Bring down 4 -> 24: 24 / 6 = 4 (6 * 4 = 24), rem = 24 - 24 = 0. Final quotient = 504. </thought> 504
+
+Q: What is 864 / 3?
+A: <thought> Divide 864 by 3: Take 8: 8 / 3 = 2 (3 * 2 = 6), rem = 8 - 6 = 2. Bring down 6 -> 26: 26 / 3 = 8 (3 * 8 = 24), rem = 26 - 24 = 2. Bring down 4 -> 24: 24 / 3 = 8 (3 * 8 = 24), rem = 24 - 24 = 0. Final quotient = 288. </thought> 288
+
+Q: What is 841 / 29?
+A: <thought> Divide 841 by 29: Take 84: 84 / 29 = 2 (29 * 2 = 58), rem = 84 - 58 = 26. Bring down 1 -> 261: 261 / 29 = 9 (29 * 9 = 261), rem = 261 - 261 = 0. Final quotient = 29. </thought> 29
+
+Q: What is 1518 / 46?
+A: <thought> Divide 1518 by 46: Take 151: 151 / 46 = 3 (46 * 3 = 138), rem = 151 - 138 = 13. Bring down 8 -> 138: 138 / 46 = 3 (46 * 3 = 138), rem = 138 - 138 = 0. Final quotient = 33. </thought> 33
+
+Q: What is 1786 / 38?
+A: <thought> Divide 1786 by 38: Take 178: 178 / 38 = 4 (38 * 4 = 152), rem = 178 - 152 = 26. Bring down 6 -> 266: 266 / 38 = 7 (38 * 7 = 266), rem = 266 - 266 = 0. Final quotient = 47. </thought> 47
+
+Q: What is 950 / 38?
+A: <thought> Divide 950 by 38: Take 95: 95 / 38 = 2 (38 * 2 = 76), rem = 95 - 76 = 19. Bring down 0 -> 190: 190 / 38 = 5 (38 * 5 = 190), rem = 190 - 190 = 0. Final quotient = 25. </thought> 25
+
+Q: What is 1360 / 8?
+A: <thought> Divide 1360 by 8: Take 13: 13 / 8 = 1 (8 * 1 = 8), rem = 13 - 8 = 5. Bring down 6 -> 56: 56 / 8 = 7 (8 * 7 = 56), rem = 56 - 56 = 0. Bring down 0 -> 0: 0 / 8 = 0 (8 * 0 = 0), rem = 0 - 0 = 0. Final quotient = 170. </thought> 170
+
+Q: What is 1522 / 2?
+A: <thought> Divide 1522 by 2: Take 15: 15 / 2 = 7 (2 * 7 = 14), rem = 15 - 14 = 1. Bring down 2 -> 12: 12 / 2 = 6 (2 * 6 = 12), rem = 12 - 12 = 0. Bring down 2 -> 2: 2 / 2 = 1 (2 * 1 = 2), rem = 2 - 2 = 0. Final quotient = 761. </thought> 761
+
+Q: What is 3465 / 45?
+A: <thought> Divide 3465 by 45: Take 346: 346 / 45 = 7 (45 * 7 = 315), rem = 346 - 315 = 31. Bring down 5 -> 315: 315 / 45 = 7 (45 * 7 = 315), rem = 315 - 315 = 0. Final quotient = 77. </thought> 77
+
+Q: What is 1435 / 41?
+A: <thought> Divide 1435 by 41: Take 143: 143 / 41 = 3 (41 * 3 = 123), rem = 143 - 123 = 20. Bring down 5 -> 205: 205 / 41 = 5 (41 * 5 = 205), rem = 205 - 205 = 0. Final quotient = 35. </thought> 35
+
+Q: What is 1552 / 4?
+A: <thought> Divide 1552 by 4: Take 15: 15 / 4 = 3 (4 * 3 = 12), rem = 15 - 12 = 3. Bring down 5 -> 35: 35 / 4 = 8 (4 * 8 = 32), rem = 35 - 32 = 3. Bring down 2 -> 32: 32 / 4 = 8 (4 * 8 = 32), rem = 32 - 32 = 0. Final quotient = 388. </thought> 388
+
+Q: What is 2328 / 6?
+A: <thought> Divide 2328 by 6: Take 23: 23 / 6 = 3 (6 * 3 = 18), rem = 23 - 18 = 5. Bring down 2 -> 52: 52 / 6 = 8 (6 * 8 = 48), rem = 52 - 48 = 4. Bring down 8 -> 48: 48 / 6 = 8 (6 * 8 = 48), rem = 48 - 48 = 0. Final quotient = 388. </thought> 388
+
+Q: What is 636 / 12?
+A: <thought> Divide 636 by 12: Take 63: 63 / 12 = 5 (12 * 5 = 60), rem = 63 - 60 = 3. Bring down 6 -> 36: 36 / 12 = 3 (12 * 3 = 36), rem = 36 - 36 = 0. Final quotient = 53. </thought> 53
+
+Q: What is 2358 / 9?
+A: <thought> Divide 2358 by 9: Take 23: 23 / 9 = 2 (9 * 2 = 18), rem = 23 - 18 = 5. Bring down 5 -> 55: 55 / 9 = 6 (9 * 6 = 54), rem = 55 - 54 = 1. Bring down 8 -> 18: 18 / 9 = 2 (9 * 2 = 18), rem = 18 - 18 = 0. Final quotient = 262. </thought> 262
+
+Q: What is 960 / 16?
+A: <thought> Divide 960 by 16: Take 96: 96 / 16 = 6 (16 * 6 = 96), rem = 96 - 96 = 0. Bring down 0 -> 0: 0 / 16 = 0 (16 * 0 = 0), rem = 0 - 0 = 0. Final quotient = 60. </thought> 60
+
+Q: What is 1832 / 8?
+A: <thought> Divide 1832 by 8: Take 18: 18 / 8 = 2 (8 * 2 = 16), rem = 18 - 16 = 2. Bring down 3 -> 23: 23 / 8 = 2 (8 * 2 = 16), rem = 23 - 16 = 7. Bring down 2 -> 72: 72 / 8 = 9 (8 * 9 = 72), rem = 72 - 72 = 0. Final quotient = 229. </thought> 229
+
+Q: What is 1214 / 2?
+A: <thought> Divide 1214 by 2: Take 12: 12 / 2 = 6 (2 * 6 = 12), rem = 12 - 12 = 0. Bring down 1 -> 1: 1 / 2 = 0 (2 * 0 = 0), rem = 1 - 0 = 1. Bring down 4 -> 14: 14 / 2 = 7 (2 * 7 = 14), rem = 14 - 14 = 0. Final quotient = 607. </thought> 607
+
+Q: What is 740 / 2?
+A: <thought> Divide 740 by 2: Take 7: 7 / 2 = 3 (2 * 3 = 6), rem = 7 - 6 = 1. Bring down 4 -> 14: 14 / 2 = 7 (2 * 7 = 14), rem = 14 - 14 = 0. Bring down 0 -> 0: 0 / 2 = 0 (2 * 0 = 0), rem = 0 - 0 = 0. Final quotient = 370. </thought> 370
+
+Q: What is 1333 / 31?
+A: <thought> Divide 1333 by 31: Take 133: 133 / 31 = 4 (31 * 4 = 124), rem = 133 - 124 = 9. Bring down 3 -> 93: 93 / 31 = 3 (31 * 3 = 93), rem = 93 - 93 = 0. Final quotient = 43. </thought> 43
+
+Q: What is 1208 / 2?
+A: <thought> Divide 1208 by 2: Take 12: 12 / 2 = 6 (2 * 6 = 12), rem = 12 - 12 = 0. Bring down 0 -> 0: 0 / 2 = 0 (2 * 0 = 0), rem = 0 - 0 = 0. Bring down 8 -> 8: 8 / 2 = 4 (2 * 4 = 8), rem = 8 - 8 = 0. Final quotient = 604. </thought> 604
+
+Q: What is 666 / 18?
+A: <thought> Divide 666 by 18: Take 66: 66 / 18 = 3 (18 * 3 = 54), rem = 66 - 54 = 12. Bring down 6 -> 126: 126 / 18 = 7 (18 * 7 = 126), rem = 126 - 126 = 0. Final quotient = 37. </thought> 37
+
+Q: What is 1295 / 35?
+A: <thought> Divide 1295 by 35: Take 129: 129 / 35 = 3 (35 * 3 = 105), rem = 129 - 105 = 24. Bring down 5 -> 245: 245 / 35 = 7 (35 * 7 = 245), rem = 245 - 245 = 0. Final quotient = 37. </thought> 37
+
+Q: What is 940 / 4?
+A: <thought> Divide 940 by 4: Take 9: 9 / 4 = 2 (4 * 2 = 8), rem = 9 - 8 = 1. Bring down 4 -> 14: 14 / 4 = 3 (4 * 3 = 12), rem = 14 - 12 = 2. Bring down 0 -> 20: 20 / 4 = 5 (4 * 5 = 20), rem = 20 - 20 = 0. Final quotient = 235. </thought> 235
+
+Q: What is 396 / 12?
+A: <thought> Divide 396 by 12: Take 39: 39 / 12 = 3 (12 * 3 = 36), rem = 39 - 36 = 3. Bring down 6 -> 36: 36 / 12 = 3 (12 * 3 = 36), rem = 36 - 36 = 0. Final quotient = 33. </thought> 33
+
+Q: What is 662 / 2?
+A: <thought> Divide 662 by 2: Take 6: 6 / 2 = 3 (2 * 3 = 6), rem = 6 - 6 = 0. Bring down 6 -> 6: 6 / 2 = 3 (2 * 3 = 6), rem = 6 - 6 = 0. Bring down 2 -> 2: 2 / 2 = 1 (2 * 1 = 2), rem = 2 - 2 = 0. Final quotient = 331. </thought> 331
+

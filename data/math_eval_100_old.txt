@@ -1,0 +1,300 @@
+Q: What is 317 + 210?
+A: <thought> 317 + 210 = 300 + 200 + 10 + 10 + 7 + 0 = 500 + 20 + 7 </thought> 527
+
+Q: What is 738 - 713?
+A: <thought> 738 - 713 = 700 - 700 + 30 - 10 + 8 - 3 = 0 + 20 + 5 </thought> 25
+
+Q: What is 800 * 843?
+A: <thought> Calculating 800 times 843 </thought> 674400
+
+Q: What is 600 - 415?
+A: <thought> 600 - 415 = 600 - 400 + 0 - 10 + 0 - 5 = 200 + -10 + -5 </thought> 185
+
+Q: What is 907 - 593?
+A: <thought> 907 - 593 = 900 - 500 + 0 - 90 + 7 - 3 = 400 + -90 + 4 </thought> 314
+
+Q: What is 262389 / 447?
+A: <thought> Calculating 262389 divided by 447 </thought> 587
+
+Q: What is 676 * 155?
+A: <thought> Calculating 676 times 155 </thought> 104780
+
+Q: What is 600 + 985?
+A: <thought> 600 + 985 = 600 + 900 + 0 + 80 + 0 + 5 = 1500 + 80 + 5 </thought> 1585
+
+Q: What is 97875 / 261?
+A: <thought> Calculating 97875 divided by 261 </thought> 375
+
+Q: What is 841 * 382?
+A: <thought> Calculating 841 times 382 </thought> 321262
+
+Q: What is 176616 / 264?
+A: <thought> Calculating 176616 divided by 264 </thought> 669
+
+Q: What is 600 * 522?
+A: <thought> Calculating 600 times 522 </thought> 313200
+
+Q: What is 183540 / 210?
+A: <thought> Calculating 183540 divided by 210 </thought> 874
+
+Q: What is 800 + 819?
+A: <thought> 800 + 819 = 800 + 800 + 0 + 10 + 0 + 9 = 1600 + 10 + 9 </thought> 1619
+
+Q: What is 178 * 146?
+A: <thought> Calculating 178 times 146 </thought> 25988
+
+Q: What is 881 * 424?
+A: <thought> Calculating 881 times 424 </thought> 373544
+
+Q: What is 910 - 243?
+A: <thought> 910 - 243 = 900 - 200 + 10 - 40 + 0 - 3 = 700 + -30 + -3 </thought> 667
+
+Q: What is 935784 / 951?
+A: <thought> Calculating 935784 divided by 951 </thought> 984
+
+Q: What is 404040 / 420?
+A: <thought> Calculating 404040 divided by 420 </thought> 962
+
+Q: What is 467 + 134?
+A: <thought> 467 + 134 = 400 + 100 + 60 + 30 + 7 + 4 = 500 + 90 + 11 </thought> 601
+
+Q: What is 225 * 312?
+A: <thought> Calculating 225 times 312 </thought> 70200
+
+Q: What is 524 * 635?
+A: <thought> Calculating 524 times 635 </thought> 332740
+
+Q: What is 968 - 627?
+A: <thought> 968 - 627 = 900 - 600 + 60 - 20 + 8 - 7 = 300 + 40 + 1 </thought> 341
+
+Q: What is 553 - 439?
+A: <thought> 553 - 439 = 500 - 400 + 50 - 30 + 3 - 9 = 100 + 20 + -6 </thought> 114
+
+Q: What is 877 - 786?
+A: <thought> 877 - 786 = 800 - 700 + 70 - 80 + 7 - 6 = 100 + -10 + 1 </thought> 91
+
+Q: What is 319 + 695?
+A: <thought> 319 + 695 = 300 + 600 + 10 + 90 + 9 + 5 = 900 + 100 + 14 </thought> 1014
+
+Q: What is 523 + 575?
+A: <thought> 523 + 575 = 500 + 500 + 20 + 70 + 3 + 5 = 1000 + 90 + 8 </thought> 1098
+
+Q: What is 748840 / 965?
+A: <thought> Calculating 748840 divided by 965 </thought> 776
+
+Q: What is 373 + 178?
+A: <thought> 373 + 178 = 300 + 100 + 70 + 70 + 3 + 8 = 400 + 140 + 11 </thought> 551
+
+Q: What is 283 - 171?
+A: <thought> 283 - 171 = 200 - 100 + 80 - 70 + 3 - 1 = 100 + 10 + 2 </thought> 112
+
+Q: What is 243190 / 415?
+A: <thought> Calculating 243190 divided by 415 </thought> 586
+
+Q: What is 613 - 193?
+A: <thought> 613 - 193 = 600 - 100 + 10 - 90 + 3 - 3 = 500 + -80 + 0 </thought> 420
+
+Q: What is 285 + 333?
+A: <thought> 285 + 333 = 200 + 300 + 80 + 30 + 5 + 3 = 500 + 110 + 8 </thought> 618
+
+Q: What is 575 - 553?
+A: <thought> 575 - 553 = 500 - 500 + 70 - 50 + 5 - 3 = 0 + 20 + 2 </thought> 22
+
+Q: What is 783 * 405?
+A: <thought> Calculating 783 times 405 </thought> 317115
+
+Q: What is 669 - 472?
+A: <thought> 669 - 472 = 600 - 400 + 60 - 70 + 9 - 2 = 200 + -10 + 7 </thought> 197
+
+Q: What is 814 * 161?
+A: <thought> Calculating 814 times 161 </thought> 131054
+
+Q: What is 575 - 563?
+A: <thought> 575 - 563 = 500 - 500 + 70 - 60 + 5 - 3 = 0 + 10 + 2 </thought> 12
+
+Q: What is 572 * 489?
+A: <thought> Calculating 572 times 489 </thought> 279708
+
+Q: What is 623050 / 850?
+A: <thought> Calculating 623050 divided by 850 </thought> 733
+
+Q: What is 811 - 563?
+A: <thought> 811 - 563 = 800 - 500 + 10 - 60 + 1 - 3 = 300 + -50 + -2 </thought> 248
+
+Q: What is 637 * 226?
+A: <thought> Calculating 637 times 226 </thought> 143962
+
+Q: What is 145926 / 242?
+A: <thought> Calculating 145926 divided by 242 </thought> 603
+
+Q: What is 923 - 213?
+A: <thought> 923 - 213 = 900 - 200 + 20 - 10 + 3 - 3 = 700 + 10 + 0 </thought> 710
+
+Q: What is 904 + 842?
+A: <thought> 904 + 842 = 900 + 800 + 0 + 40 + 4 + 2 = 1700 + 40 + 6 </thought> 1746
+
+Q: What is 634 - 513?
+A: <thought> 634 - 513 = 600 - 500 + 30 - 10 + 4 - 3 = 100 + 20 + 1 </thought> 121
+
+Q: What is 231552 / 536?
+A: <thought> Calculating 231552 divided by 536 </thought> 432
+
+Q: What is 844 - 501?
+A: <thought> 844 - 501 = 800 - 500 + 40 - 0 + 4 - 1 = 300 + 40 + 3 </thought> 343
+
+Q: What is 833 + 669?
+A: <thought> 833 + 669 = 800 + 600 + 30 + 60 + 3 + 9 = 1400 + 90 + 12 </thought> 1502
+
+Q: What is 544 + 979?
+A: <thought> 544 + 979 = 500 + 900 + 40 + 70 + 4 + 9 = 1400 + 110 + 13 </thought> 1523
+
+Q: What is 659976 / 856?
+A: <thought> Calculating 659976 divided by 856 </thought> 771
+
+Q: What is 907 + 644?
+A: <thought> 907 + 644 = 900 + 600 + 0 + 40 + 7 + 4 = 1500 + 40 + 11 </thought> 1551
+
+Q: What is 289578 / 334?
+A: <thought> Calculating 289578 divided by 334 </thought> 867
+
+Q: What is 138624 / 361?
+A: <thought> Calculating 138624 divided by 361 </thought> 384
+
+Q: What is 284418 / 687?
+A: <thought> Calculating 284418 divided by 687 </thought> 414
+
+Q: What is 660 - 617?
+A: <thought> 660 - 617 = 600 - 600 + 60 - 10 + 0 - 7 = 0 + 50 + -7 </thought> 43
+
+Q: What is 116616 / 129?
+A: <thought> Calculating 116616 divided by 129 </thought> 904
+
+Q: What is 582 + 667?
+A: <thought> 582 + 667 = 500 + 600 + 80 + 60 + 2 + 7 = 1100 + 140 + 9 </thought> 1249
+
+Q: What is 361 + 496?
+A: <thought> 361 + 496 = 300 + 400 + 60 + 90 + 1 + 6 = 700 + 150 + 7 </thought> 857
+
+Q: What is 649 - 545?
+A: <thought> 649 - 545 = 600 - 500 + 40 - 40 + 9 - 5 = 100 + 0 + 4 </thought> 104
+
+Q: What is 134644 / 164?
+A: <thought> Calculating 134644 divided by 164 </thought> 821
+
+Q: What is 720 * 900?
+A: <thought> Calculating 720 times 900 </thought> 648000
+
+Q: What is 451940 / 766?
+A: <thought> Calculating 451940 divided by 766 </thought> 590
+
+Q: What is 133980 / 385?
+A: <thought> Calculating 133980 divided by 385 </thought> 348
+
+Q: What is 776 - 384?
+A: <thought> 776 - 384 = 700 - 300 + 70 - 80 + 6 - 4 = 400 + -10 + 2 </thought> 392
+
+Q: What is 901 - 248?
+A: <thought> 901 - 248 = 900 - 200 + 0 - 40 + 1 - 8 = 700 + -40 + -7 </thought> 653
+
+Q: What is 226803 / 519?
+A: <thought> Calculating 226803 divided by 519 </thought> 437
+
+Q: What is 623 - 605?
+A: <thought> 623 - 605 = 600 - 600 + 20 - 0 + 3 - 5 = 0 + 20 + -2 </thought> 18
+
+Q: What is 264 + 873?
+A: <thought> 264 + 873 = 200 + 800 + 60 + 70 + 4 + 3 = 1000 + 130 + 7 </thought> 1137
+
+Q: What is 474 * 848?
+A: <thought> Calculating 474 times 848 </thought> 401952
+
+Q: What is 833 * 248?
+A: <thought> Calculating 833 times 248 </thought> 206584
+
+Q: What is 946 * 406?
+A: <thought> Calculating 946 times 406 </thought> 384076
+
+Q: What is 784992 / 888?
+A: <thought> Calculating 784992 divided by 888 </thought> 884
+
+Q: What is 430641 / 811?
+A: <thought> Calculating 430641 divided by 811 </thought> 531
+
+Q: What is 846 - 649?
+A: <thought> 846 - 649 = 800 - 600 + 40 - 40 + 6 - 9 = 200 + 0 + -3 </thought> 197
+
+Q: What is 694 + 957?
+A: <thought> 694 + 957 = 600 + 900 + 90 + 50 + 4 + 7 = 1500 + 140 + 11 </thought> 1651
+
+Q: What is 660 + 206?
+A: <thought> 660 + 206 = 600 + 200 + 60 + 0 + 0 + 6 = 800 + 60 + 6 </thought> 866
+
+Q: What is 351 + 704?
+A: <thought> 351 + 704 = 300 + 700 + 50 + 0 + 1 + 4 = 1000 + 50 + 5 </thought> 1055
+
+Q: What is 327 + 518?
+A: <thought> 327 + 518 = 300 + 500 + 20 + 10 + 7 + 8 = 800 + 30 + 15 </thought> 845
+
+Q: What is 749810 / 970?
+A: <thought> Calculating 749810 divided by 970 </thought> 773
+
+Q: What is 642 - 489?
+A: <thought> 642 - 489 = 600 - 400 + 40 - 80 + 2 - 9 = 200 + -40 + -7 </thought> 153
+
+Q: What is 377859 / 717?
+A: <thought> Calculating 377859 divided by 717 </thought> 527
+
+Q: What is 759 * 292?
+A: <thought> Calculating 759 times 292 </thought> 221628
+
+Q: What is 672 - 148?
+A: <thought> 672 - 148 = 600 - 100 + 70 - 40 + 2 - 8 = 500 + 30 + -6 </thought> 524
+
+Q: What is 906 * 134?
+A: <thought> Calculating 906 times 134 </thought> 121404
+
+Q: What is 712902 / 907?
+A: <thought> Calculating 712902 divided by 907 </thought> 786
+
+Q: What is 981 * 136?
+A: <thought> Calculating 981 times 136 </thought> 133416
+
+Q: What is 775 + 481?
+A: <thought> 775 + 481 = 700 + 400 + 70 + 80 + 5 + 1 = 1100 + 150 + 6 </thought> 1256
+
+Q: What is 656 - 503?
+A: <thought> 656 - 503 = 600 - 500 + 50 - 0 + 6 - 3 = 100 + 50 + 3 </thought> 153
+
+Q: What is 169 * 378?
+A: <thought> Calculating 169 times 378 </thought> 63882
+
+Q: What is 329 + 560?
+A: <thought> 329 + 560 = 300 + 500 + 20 + 60 + 9 + 0 = 800 + 80 + 9 </thought> 889
+
+Q: What is 852 * 992?
+A: <thought> Calculating 852 times 992 </thought> 845184
+
+Q: What is 813 * 794?
+A: <thought> Calculating 813 times 794 </thought> 645522
+
+Q: What is 991 + 780?
+A: <thought> 991 + 780 = 900 + 700 + 90 + 80 + 1 + 0 = 1600 + 170 + 1 </thought> 1771
+
+Q: What is 562 * 122?
+A: <thought> Calculating 562 times 122 </thought> 68564
+
+Q: What is 924 + 371?
+A: <thought> 924 + 371 = 900 + 300 + 20 + 70 + 4 + 1 = 1200 + 90 + 5 </thought> 1295
+
+Q: What is 458 * 502?
+A: <thought> Calculating 458 times 502 </thought> 229916
+
+Q: What is 878 + 739?
+A: <thought> 878 + 739 = 800 + 700 + 70 + 30 + 8 + 9 = 1500 + 100 + 17 </thought> 1617
+
+Q: What is 327 * 598?
+A: <thought> Calculating 327 times 598 </thought> 195546
+
+Q: What is 111 + 698?
+A: <thought> 111 + 698 = 100 + 600 + 10 + 90 + 1 + 8 = 700 + 100 + 9 </thought> 809
+

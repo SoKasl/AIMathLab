@@ -6,21 +6,22 @@ env/
 __pycache__/
 *.pyc
 
-# Model Weights
+# Model Weights and Checkpoints
+checkpoints/
 *.pt
 *.pth
+packaged_models/
 
-# Generated Data
-math_train*
-math_eval*
-math_stage*
-math_hierarchical*
-scratch/
-
-# Experiment Results
-experiment_results.csv
+# Logs and Run Outputs
+logs/
+*.log
 *_samples_*.txt
 test_run.csv
+
+# Large Training Data (reproducible via generate_math_data.py / generate_hierarchical_curriculum.py)
+data/train/
+data_train/
+scratch/
 
 # Research Drafts
 paper_draft*.md

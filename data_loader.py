@@ -161,6 +161,16 @@ def get_dataloaders(batch_size=4, block_size=256, use_old_data=False, use_curric
         train_file = "math_train.txt"
         eval_file = "math_eval.txt"
     
+    # Check data/ and data/train/ subdirectories if not in root
+    if not os.path.exists(train_file):
+        if os.path.exists(os.path.join("data", train_file)):
+            train_file = os.path.join("data", train_file)
+        elif os.path.exists(os.path.join("data", "train", train_file)):
+            train_file = os.path.join("data", "train", train_file)
+            
+    if not os.path.exists(eval_file) and os.path.exists(os.path.join("data", eval_file)):
+        eval_file = os.path.join("data", eval_file)
+
     # Load our persisted math datasets
     math_train_dataset = SyntheticMathDataset(train_file, block_size=block_size)
     math_eval_dataset = SyntheticMathDataset(eval_file, block_size=block_size)

@@ -143,8 +143,7 @@ class MultiHeadAttention(nn.Module):
             self.c_proj = nn.Linear(config.n_embd, config.n_embd)
             self.dropout = nn.Dropout(config.dropout)
             if config.use_rope:
-                # Precompute up to 2048 to support generating beyond the trained block_size (256)
-                self.register_buffer('freqs_cis', precompute_freqs_cis(config.n_embd // config.n_head, 2048))
+                self.register_buffer('freqs_cis', precompute_freqs_cis(config.n_embd // config.n_head, config.block_size))
 
     def forward(self, x, layer_past=None, pos_offset=0):
         """ Routes to the correct attention implementation based on ModelConfig """
@@ -433,8 +432,7 @@ class GPT(nn.Module):
         
         # Token embedding and positional embedding
         self.token_embedding_table = nn.Embedding(self.config.vocab_size, self.config.n_embd)
-        # Precompute up to 2048 to support generating beyond the trained block_size (256)
-        self.position_embedding_table = nn.Embedding(2048, self.config.n_embd)
+        self.position_embedding_table = nn.Embedding(self.config.block_size, self.config.n_embd)
         
         # Sequence of transformer blocks
         self.blocks = nn.Sequential(*[Block(self.config) for _ in range(self.config.n_layer)])

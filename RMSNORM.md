@@ -1,52 +1,102 @@
-# RMSNorm: Root Mean Square Normalization
+# RMSNorm: Root Mean Square Layer Normalization
 
-This repository replaces the classic Transformer `LayerNorm` with **RMSNorm**, the modern standard used in state-of-the-art models like LLaMA, Mistral, Gemma, and Qwen.
+This document provides the mathematical formulation, invariance properties, computational efficiency advantages, and implementation details for **RMSNorm** (Root Mean Square Normalization) used in AIMathLab.
 
-## What is Layer Normalization?
-In deep neural networks, activations can grow wildly out of control or vanish as they pass through dozens of layers. Normalization keeps these activations mathematically stable.
+RMSNorm (Zhang & Sennrich, NeurIPS 2019) replaces classical Transformer `LayerNorm` (Ba et al., 2016). It has become the standard normalization layer in modern foundation models such as **LLaMA (1/2/3)**, **Mistral/Mixtral**, **Gemma**, and **Qwen**.
 
-Classic **LayerNorm** stabilizes activations in two steps:
-1. **Mean Centering:** It calculates the mean (average) of the activations and subtracts it.
-2. **Variance Scaling:** It calculates the variance (spread) of the activations and divides by the square root of the variance, scaling them to a standard deviation of 1.
+---
 
-Finally, it applies a learnable scale (`weight`) and shift (`bias`).
+## 1. Classical Layer Normalization (LayerNorm)
 
-The math looks like this:
-$$ \text{LayerNorm}(x) = \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} \times \text{weight} + \text{bias} $$
+Given an input token feature vector $x \in \mathbb{R}^d$ (where $d = d_{\text{model}}$ is the hidden dimension), standard LayerNorm enforces zero-mean and unit-variance across the feature dimension:
 
-### How Normalization Applies to Tokens
-It is a common misconception that these normalization techniques are applied across the entire sentence sequence (the "timestep" dimension). In reality, LayerNorm and RMSNorm operate independently on the **embedding dimension** (the features) for *each individual token*. 
+$$
+\mu = \frac{1}{d} \sum_{i=1}^d x_i
+$$
 
-For example, if your sequence is "The cat sat" and your embedding dimension is 384:
-- The normalization layer grabs the 384 features for "The" and normalizes them against themselves.
-- It grabs the 384 features for "cat" and normalizes them against themselves.
-- It grabs the 384 features for "sat" and normalizes them against themselves.
+$$
+\sigma = \sqrt{\frac{1}{d} \sum_{i=1}^d (x_i - \mu)^2 + \epsilon}
+$$
 
-This ensures every individual token remains mathematically stable as it travels deeper into the network's layers, without its representation changing based on the length of the sentence!
+$$
+y = \text{LayerNorm}(x) = \frac{x - \mu}{\sigma} \odot \gamma + \beta
+$$
 
-## Why switch to RMSNorm?
-In 2019, researchers hypothesized that the **mean centering** part of LayerNorm was actually mathematically useless. They proved that the only part of LayerNorm that actually helps the network learn is the **variance scaling**.
+Where:
+- $\mu \in \mathbb{R}$ is the mean across the hidden dimension.
+- $\sigma \in \mathbb{R}$ is the standard deviation.
+- $\epsilon > 0$ is a small numerical stability constant (e.g., $10^{-5}$ or $10^{-6}$).
+- $\gamma \in \mathbb{R}^d$ is a learnable scaling parameter (`weight`), initialized to $\mathbf{1}$.
+- $\beta \in \mathbb{R}^d$ is a learnable bias parameter (`bias`), initialized to $\mathbf{0}$.
+- $\odot$ denotes element-wise vector multiplication.
 
-Calculating the mean and subtracting it across massive matrices is computationally expensive. **RMSNorm** simply drops the mean-centering step entirely. It also drops the learnable `bias` parameter, keeping only the learnable `weight` scaling parameter.
+---
 
-The math looks like this:
-$$ \text{RMSNorm}(x) = \frac{x}{\sqrt{\text{RMS}(x)^2 + \epsilon}} \times \text{weight} $$
+## 2. Mathematical Definition of RMSNorm
 
-*(Where RMS is the Root Mean Square, or the square root of the mean of the squared values).*
+Zhang & Sennrich (2019) demonstrated through extensive empirical and theoretical analysis that the computational benefit of LayerNorm is **not** driven by re-centering ($\mu = 0$), but rather by the **scaling property** that stabilizes gradient norms across layers.
 
-## Benefits of RMSNorm
-1. **Faster Computation:** By dropping the mean subtraction, RMSNorm requires fewer mathematical operations and fewer memory accesses. This results in a **10% to 20% speedup** in the normalization layers.
-2. **Identical Performance:** Despite doing less math, models trained with RMSNorm achieve identical (and sometimes slightly better) loss curves and accuracy compared to standard LayerNorm.
-3. **Fewer Parameters:** RMSNorm drops the `bias` parameter, making the model slightly more parameter-efficient.
+By dispensing with the mean computation and mean-centering shift, **RMSNorm** scales the activations strictly by the root mean square of their components:
 
-## Implementation Details
-In our `RMSNorm` class, the core calculation is extremely compact in PyTorch:
+$$
+\text{RMS}(x) = \sqrt{\frac{1}{d} \sum_{i=1}^d x_i^2 + \epsilon}
+$$
+
+$$
+\bar{x}_i = \frac{x_i}{\text{RMS}(x)}
+$$
+
+$$
+y = \text{RMSNorm}(x) = \frac{x}{\text{RMS}(x)} \odot \gamma
+$$
+
+Where:
+- $x = (x_1, x_2, \dots, x_d)^T \in \mathbb{R}^d$ is the activation vector of a single token.
+- $\text{RMS}(x) \in \mathbb{R}$ is the root mean square scalar statistic of $x$.
+- $\gamma \in \mathbb{R}^d$ is the single learnable scaling vector (`self.weight`).
+- The learnable bias $\beta$ is removed entirely.
+
+---
+
+## 3. Invariance Properties & Efficiency
+
+### A. Scale Invariance
+RMSNorm preserves the crucial **scale-invariance** property of LayerNorm:
+
+$$
+\text{RMSNorm}(\alpha x) = \frac{\alpha x}{\sqrt{\frac{1}{d} \sum_{i=1}^d (\alpha x_i)^2 + \epsilon}} \odot \gamma \approx \frac{\alpha x}{\alpha \text{RMS}(x)} \odot \gamma = \text{RMSNorm}(x)
+$$
+
+If weights in previous layers grow by a constant factor $\alpha$, the forward activations and gradient updates remain automatically calibrated.
+
+### B. Dropping Shift Invariance
+LayerNorm possesses both shift-invariance ($\text{LN}(x + c) = \text{LN}(x)$) and scale-invariance. RMSNorm sacrifices shift-invariance, but Zhang & Sennrich demonstrated that shift-invariance does not contribute to training stability in deep neural networks.
+
+### C. Computational & Memory Speedup
+1. **Fewer Reduction Passes:** LayerNorm requires computing two distinct statistical reductions across the hidden dimension: first the mean $\mu$, then the variance $\sigma^2 = \frac{1}{d} \sum (x_i - \mu)^2$. RMSNorm requires only **a single reduction** ($\frac{1}{d} \sum x_i^2$).
+2. **Speedup:** Eliminating the first reduction pass and subtraction yields a **10% to 25% speedup** in the normalization kernels.
+3. **Parameter Efficiency:** Eliminates the $d$-dimensional $\beta$ bias parameter per layer.
+
+---
+
+## 4. Code References in AIMathLab
+
+In this repository, RMSNorm is implemented in [`model.py`](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model.py) and [`model_kv_cache.py`](file:///Users/sourabhk/Workspace/ExperimentingData/Training/model_kv_cache.py#L320-L335) with fused reciprocal square root (`torch.rsqrt`) for optimal GPU/MPS kernel efficiency:
+
 ```python
-# 1. Square the inputs (x.pow(2))
-# 2. Take the mean across the embedding dimension (.mean(-1, keepdim=True))
-# 3. Add epsilon and take the reciprocal square root (torch.rsqrt)
-x_norm = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
+class RMSNorm(nn.Module):
+    def __init__(self, dim, eps=1e-6):
+        super().__init__()
+        self.eps = eps
+        self.weight = nn.Parameter(torch.ones(dim))
 
-# Finally, multiply by the learnable weight parameter
-return self.weight * x_norm
+    def forward(self, x):
+        # 1. Compute variance = 1/d * sum(x_i^2)
+        # 2. Multiply by reciprocal square root: x / sqrt(variance + eps)
+        x_norm = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
+        # 3. Element-wise scale by learnable weight
+        return self.weight * x_norm
 ```
+
+`RMSNorm` is registered to normalize inputs prior to self-attention (`ln1`), prior to feed-forward blocks (`ln2`), and at the final output of the transformer backbone before the language modeling head (`ln_f`).
+
